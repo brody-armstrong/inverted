@@ -1,0 +1,7 @@
+# Python and OS (project-specific data rules live in each project's .gitignore)
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+.DS_Store

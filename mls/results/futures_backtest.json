@@ -1,0 +1,114 @@
+{
+ "2025": {
+  "n": 30,
+  "spearman_model_market": 0.8148024535717724,
+  "market_vs_actual": 0.4202610981377829,
+  "model_vs_actual": 0.45364426561960675,
+  "divergences": [
+   {
+    "team": "Real Salt Lake",
+    "market_rank": 13.0,
+    "model_rank": 27.5,
+    "actual_rank": 20.0,
+    "actual_pts": 41,
+    "closer": "market"
+   },
+   {
+    "team": "Philadelphia Union",
+    "market_rank": 11.0,
+    "model_rank": 22.0,
+    "actual_rank": 1.0,
+    "actual_pts": 66,
+    "closer": "market"
+   },
+   {
+    "team": "Sporting Kansas City",
+    "market_rank": 28.0,
+    "model_rank": 18.0,
+    "actual_rank": 28.0,
+    "actual_pts": 28,
+    "closer": "market"
+   },
+   {
+    "team": "Toronto FC",
+    "market_rank": 29.0,
+    "model_rank": 20.5,
+    "actual_rank": 24.5,
+    "actual_pts": 32,
+    "closer": "model"
+   },
+   {
+    "team": "Portland Timbers FC",
+    "market_rank": 17.0,
+    "model_rank": 9.0,
+    "actual_rank": 16.5,
+    "actual_pts": 44,
+    "closer": "market"
+   },
+   {
+    "team": "Vancouver Whitecaps FC",
+    "market_rank": 14.5,
+    "model_rank": 8.0,
+    "actual_rank": 4.5,
+    "actual_pts": 63,
+    "closer": "model"
+   }
+  ]
+ },
+ "2026": {
+  "n": 30,
+  "spearman_model_market": 0.8018315659306857,
+  "market_vs_actual": 0.31039113120116085,
+  "model_vs_actual": 0.3236381602396764,
+  "divergences": [
+   {
+    "team": "Austin FC",
+    "market_rank": 21.0,
+    "model_rank": 8.0,
+    "actual_rank": 26.0,
+    "actual_pts": 34,
+    "closer": "market"
+   },
+   {
+    "team": "New York Red Bulls",
+    "market_rank": 13.0,
+    "model_rank": 22.0,
+    "actual_rank": 22.5,
+    "actual_pts": 42,
+    "closer": "model"
+   },
+   {
+    "team": "St. Louis City SC",
+    "market_rank": 28.5,
+    "model_rank": 20.0,
+    "actual_rank": 7.5,
+    "actual_pts": 54,
+    "closer": "model"
+   },
+   {
+    "team": "Real Salt Lake",
+    "market_rank": 18.0,
+    "model_rank": 26.0,
+    "actual_rank": 18.0,
+    "actual_pts": 45,
+    "closer": "market"
+   },
+   {
+    "team": "Houston Dynamo FC",
+    "market_rank": 17.0,
+    "model_rank": 9.0,
+    "actual_rank": 10.0,
+    "actual_pts": 51,
+    "closer": "model"
+   },
+   {
+    "team": "FC Dallas",
+    "market_rank": 21.0,
+    "model_rank": 28.0,
+    "actual_rank": 4.5,
+    "actual_pts": 58,
+    "closer": "market"
+   }
+  ]
+ }
+}

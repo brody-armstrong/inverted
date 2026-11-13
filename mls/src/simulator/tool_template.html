@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MLS Roster Investment Simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Layout: control bar, then summary tiles, then decision panels, then roster + league table. Front-office tool, scanned not read. */
+  --bg: #eef1f4; --surface: #ffffff; --ink: #15202b; --muted: #5d6876; --line: #d5dbe2;
+  --accent: #b9471c; --accent-soft: #f6e3da; --good: #23784a; --bad: #b42335; --warn: #9a6a00;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif; --body: "IBM Plex Sans", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f151c; --surface: #18212b; --ink: #e8edf2; --muted: #9aa6b4; --line: #2b3643;
+  --accent: #f0814f; --accent-soft: #3a2419; --good: #5cc28a; --bad: #f07a86; --warn: #e2b24a; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0f151c; --surface: #18212b; --ink: #e8edf2; --muted: #9aa6b4; --line: #2b3643;
+  --accent: #f0814f; --accent-soft: #3a2419; --good: #5cc28a; --bad: #f07a86; --warn: #e2b24a; color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.45; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 20px 18px 40px; display: grid; gap: 16px; }
+h1 { font-family: var(--display); font-weight: 700; font-size: 34px; letter-spacing: .3px; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 21px; margin: 0 0 8px; letter-spacing: .3px; }
+.sub { color: var(--muted); margin: 2px 0 0; max-width: 70ch; }
+.bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+.field { display: grid; gap: 4px; }
+label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; font-weight: 600; }
+select, input[type=number], input[type=text] { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 7px; padding: 7px 9px; min-width: 120px; }
+select:focus, input:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+button { font: inherit; font-weight: 600; border: 1px solid var(--accent); background: var(--accent); color: #fff; border-radius: 7px; padding: 7px 12px; cursor: pointer; }
+button.ghost { background: transparent; color: var(--accent); }
+button.mini { padding: 2px 8px; font-size: 13px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+.tile .k { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; font-weight: 600; }
+.tile .v { font-family: var(--display); font-size: 38px; font-weight: 700; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.tile .d { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.delta-pos { color: var(--good); font-weight: 600; } .delta-neg { color: var(--bad); font-weight: 600; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; min-width: 0; }
+.panel.key { border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); font-size: 14px; }
+th { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; font-weight: 600; }
+td.n, th.n { text-align: right; }
+tr.best td { background: var(--accent-soft); }
+tr.out td { opacity: .45; text-decoration: line-through; }
+tr.added td:first-child::after { content: " new"; color: var(--accent); font-size: 11px; font-weight: 700; }
+tr.me td { background: var(--accent-soft); font-weight: 600; }
+.scroll { overflow-x: auto; max-height: 520px; overflow-y: auto; }
+.pill { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 99px; background: var(--bg); color: var(--muted); border: 1px solid var(--line); }
+.barrow { display: grid; grid-template-columns: 34px 1fr 64px; gap: 8px; align-items: center; margin: 5px 0; font-size: 14px; }
+.track { position: relative; height: 12px; background: var(--bg); border-radius: 3px; }
+.track .mid { position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--muted); }
+.track .fill { position: absolute; top: 0; bottom: 0; border-radius: 3px; }
+.note { font-size: 13px; color: var(--muted); max-width: 90ch; }
+.addrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; margin-top: 10px; }
+.hint { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
+.status { font-size: 13px; color: var(--muted); min-height: 1.2em; }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 12px; display: grid; gap: 6px; max-width: 100ch; }
+@media (prefers-reduced-motion: no-preference) { .tile .v { transition: color .2s; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>MLS Roster Investment Simulator</h1>
+    <p class="sub"><strong>v1.0 · post-2026 roster snapshot.</strong> A roster evaluation tool, not a 2027 forecast: offseason moves (option decisions, departures, trades, signings) are entered as scenarios until rosters settle. Remove players, add players or signings, and set extra budget to see what moves the needle. Every change shows an 80% range.</p>
+  </header>
+
+  <form class="bar" id="controls" onsubmit="event.preventDefault()">
+    <div class="field"><label for="club">Club</label><select id="club"></select></div>
+    <div class="field"><label for="budget">Extra budget ($M per year)</label><input id="budget" type="number" min="0" max="20" step="0.25" value="2.5"></div>
+    <div class="field"><label for="dropce">&nbsp;</label><button type="button" class="ghost" id="dropce">Remove contracts ending 2026</button></div>
+    <div class="field"><label for="reset">&nbsp;</label><button type="button" class="ghost" id="reset">Reset roster</button></div>
+    <div class="status" id="status"></div>
+  </form>
+
+  <section class="tiles" aria-label="Projection summary">
+    <div class="tile"><div class="k">Projected points</div><div class="v" id="t-pts">–</div><div class="d" id="t-pts-d">–</div></div>
+    <div class="tile"><div class="k">Playoff probability</div><div class="v" id="t-po">–</div><div class="d" id="t-po-d">–</div></div>
+    <div class="tile"><div class="k">MLS Cup probability</div><div class="v" id="t-cup">–</div><div class="d" id="t-cup-d">–</div></div>
+    <div class="tile"><div class="k">Projected table rank</div><div class="v" id="t-rank">–</div><div class="d" id="t-rank-d">–</div></div>
+  </section>
+
+  <div class="grid2">
+    <section class="panel key" aria-labelledby="h-money">
+      <h2 id="h-money">Best use of the extra budget</h2>
+      <p class="hint" id="money-hint">Same total spend, split different ways. Each signing is a typical new arrival at that salary, age 27.</p>
+      <div class="scroll" style="max-height:none"><table id="money"><thead><tr><th>Option</th><th class="n">Impact each</th><th class="n">Points (80% range)</th><th class="n">Playoffs</th></tr></thead><tbody></tbody></table></div>
+      <p class="note" id="money-note"></p>
+    </section>
+    <section class="panel" aria-labelledby="h-weak">
+      <h2 id="h-weak">Strongest weakness</h2>
+      <p class="hint" id="weak-text"></p>
+      <div id="posbars"></div>
+      <p class="note">Bars compare this club's expected contribution by position group with the league average for the same group (goals per match). Left of the line is below average.</p>
+    </section>
+  </div>
+
+  <div class="grid2">
+    <section class="panel" aria-labelledby="h-roster">
+      <h2 id="h-roster">Roster</h2>
+      <p class="hint">Impact = projected contribution to goal difference per 90 minutes, in hundredths of a goal. Minutes share follows how MLS clubs have split minutes by player quality.</p>
+      <div class="scroll"><table id="roster"><thead><tr><th>Player</th><th>Pos</th><th class="n">Age</th><th class="n">Salary</th><th class="n">Impact</th><th class="n">Minutes</th><th></th></tr></thead><tbody></tbody></table></div>
+      <div class="addrow">
+        <div class="field" style="flex:1;min-width:200px"><label for="search">Add an MLS player</label><input id="search" type="text" list="pool" placeholder="Type a name"></div>
+        <button type="button" id="addp">Add player</button>
+      </div>
+      <datalist id="pool"></datalist>
+      <div class="addrow">
+        <div class="field"><label for="sigsal">Or sign a new player at ($M)</label><input id="sigsal" type="number" min="0.1" max="20" step="0.25" value="1.5"></div>
+        <div class="field"><label for="sigage">Age</label><input id="sigage" type="number" min="17" max="38" step="1" value="26"></div>
+        <button type="button" id="addsig">Add signing</button>
+      </div>
+    </section>
+    <section class="panel" aria-labelledby="h-table">
+      <h2 id="h-table">Projected table</h2>
+      <p class="hint">Mean points from 3,000 simulated seasons of the 2026 schedule; range is the 10th to 90th percentile.</p>
+      <div class="scroll"><table id="league"><thead><tr><th class="n">#</th><th>Club</th><th class="n">Points</th><th class="n">Range</th><th class="n">Playoffs</th></tr></thead><tbody></tbody></table></div>
+    </section>
+  </div>
+
+  <footer>
+    <div><strong>How it's built.</strong> Player impact comes from __MATCHES__ MLS matches (__SEASONS__): how closing betting lines moved with who was on the field, projected forward with age, salary and recent form. Team strength adds up each player's impact by expected minutes; seasons are simulated match by match.</div>
+    <div><strong>How well it works.</strong> Backtested 2016–2026 from preseason rosters: average rank correlation with final points __BT_MODEL__ (last season's points: __BT_NAIVE__). Against preseason MLS Cup futures it reproduces the market's ranking (2025: __F25__, 2026: __F26__) with similar accuracy against final points. Typical error is about __RMSE__ points per club, half of it match luck.</div>
+    <div><strong>Limits.</strong> Values every minute alike; outside-cause absences suggest elite players matter somewhat more than this, so star upgrades may be undervalued. Budget means guaranteed compensation: salary cap, DP, TAM and GAM mechanics are not modelled. Rosters come from a third-party salary list updated March–September 2026 by club (San Diego: April 2026 MLSPA release); later moves are missing, and many contracts listed as ending in 2026 carry club options. Signings are valued from past arrivals at a similar salary and age; transfer fees and previous leagues are not used yet.</div>
+  </footer>
+</div>
+<script>
+const DATA = __DATA__;
+const N_SIM = 3000;
+const T = DATA.teams, CURVE0 = DATA.curve, H = DATA.h, C = DATA.c, TOT = DATA.total, TEAM_SD = DATA.team_sd, NC = DATA.new_curve;
+// scale the rank curve so a typical-size roster's shares sum to 1 (the scale the team model was fitted on)
+const NMED = T.map(t => t.players.length).sort((a, b) => a - b)[Math.floor(T.length / 2)];
+const CURVE = (() => { const s = CURVE0.slice(0, NMED).reduce((a, b) => a + b, 0); return CURVE0.map(x => x / s); })();
+// replacement level: average projected impact of players ranked 21st or lower on their own club
+const REPL = (() => { let s = 0, n = 0; T.forEach(t => t.players.slice().sort((a, b) => b.r - a.r).slice(20).forEach(p => { s += p.r; n++; })); return n ? s / n : 0; })();
+const fmt$ = s => s >= 1e6 ? "$" + (s / 1e6).toFixed(s >= 1e7 ? 0 : 2).replace(/\.?0+$/, "") + "M" : "$" + Math.round(s / 1e3) + "k";
+const imp = r => (r * 100).toFixed(1);
+const sgn = (x, d = 1) => { const r = Math.abs(x).toFixed(d); return +r === 0 ? "0" : (x > 0 ? "+" : "−") + r; };
+let rosters = T.map(t => t.players.map(p => Object.assign({}, p)));
+let sel = Math.max(0, T.findIndex(t => t.name === "Seattle Sounders FC"));
+
+// ---------- engine ----------
+function mulberry(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gauss(rng) { let u = 0, v = 0; while (u === 0) u = rng(); v = rng(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+const pmf = (k, l) => { let p = Math.exp(-l); for (let i = 1; i <= k; i++) p *= l / i; return p; };
+const LUT = (() => { const out = []; for (let g = -500; g <= 500; g++) { const gd = g / 100; const lh = Math.max((TOT + gd) / 2, .15), la = Math.max((TOT - gd) / 2, .15);
+  let ph = 0, pd = 0; const A = [], B = []; for (let i = 0; i <= 10; i++) { A.push(pmf(i, lh)); B.push(pmf(i, la)); }
+  for (let i = 0; i <= 10; i++) for (let j = 0; j <= 10; j++) { if (i > j) ph += A[i] * B[j]; else if (i === j) pd += A[i] * B[j]; } out.push([ph, pd]); } return out; })();
+const probs = gd => LUT[Math.max(0, Math.min(1000, Math.round(gd * 100) + 500))];
+function teamQ(roster) {
+  const act = roster.filter(p => !p.out).slice().sort((a, b) => b.r - a.r);
+  // minutes share by rank within the club (historical MLS average); a new player takes his rank's share and pushes
+  // everyone below him down one rank, so only the players he displaces lose minutes
+  let q = 0; act.forEach((p, i) => { p.share = i < CURVE.length ? CURVE[i] : 0; q += p.share * 11 * p.r; });
+  // a roster shorter than typical leaves minutes that a replacement-level player fills
+  for (let i = act.length; i < NMED; i++) q += CURVE[i] * 11 * REPL;
+  roster.filter(p => p.out).forEach(p => p.share = 0);
+  return q;
+}
+function simulate(Qs, seed, n = N_SIM) {
+  const rng = mulberry(seed), nt = Qs.length, sch = DATA.sched, east = T.map(t => t.conf === "East");
+  const pts = Array.from({ length: nt }, () => new Float64Array(n)), po = new Float64Array(nt), cup = new Float64Array(nt);
+  const ko = (a, b, q, home) => { const p = probs((home ? H : -H) + C * (q[a] - q[b])); return rng() < p[0] + p[1] / 2; };
+  for (let s = 0; s < n; s++) {
+    const q = Qs.map(x => x + TEAM_SD * gauss(rng)); const p = new Float64Array(nt);
+    for (const [h, a] of sch) { const [ph, pd] = probs(H + C * (q[h] - q[a])); const u = rng(); if (u < ph) p[h] += 3; else if (u < ph + pd) { p[h] += 1; p[a] += 1; } else p[a] += 3; }
+    for (let i = 0; i < nt; i++) { pts[i][s] = p[i]; p[i] += rng() * 1e-3; }
+    const champs = [];
+    for (const conf of [true, false]) {
+      const seeds = [...Array(nt).keys()].filter(i => east[i] === conf).sort((x, y) => p[y] - p[x]).slice(0, 9);
+      seeds.forEach(i => po[i]++);
+      const wc = ko(seeds[7], seeds[8], q, true) ? seeds[7] : seeds[8];
+      const bo3 = (a, b) => { let w = 0; for (let g = 0; g < 3; g++) { w += ko(a, b, q, g !== 1) ? 1 : 0; if (w === 2 || g + 1 - w === 2) break; } return w >= 2 ? a : b; };
+      const r1 = [bo3(seeds[0], wc), bo3(seeds[3], seeds[4]), bo3(seeds[1], seeds[6]), bo3(seeds[2], seeds[5])];
+      const rk = new Map([...seeds, wc].map((t, i) => [t, i]));
+      const g1 = (a, b) => { const [x, y] = rk.get(a) <= rk.get(b) ? [a, b] : [b, a]; return ko(x, y, q, true) ? x : y; };
+      champs.push(g1(g1(r1[0], r1[1]), g1(r1[2], r1[3])));
+    }
+    const [a, b] = p[champs[0]] >= p[champs[1]] ? champs : [champs[1], champs[0]];
+    cup[ko(a, b, q, true) ? a : b]++;
+  }
+  return Qs.map((_, i) => { const arr = Array.from(pts[i]).sort((x, y) => x - y);
+    return { mean: arr.reduce((x, y) => x + y, 0) / n, lo: arr[Math.floor(n * .1)], hi: arr[Math.floor(n * .9)], po: po[i] / n, cup: cup[i] / n }; });
+}
+const regImpact = (sal, age) => { const ag = ((age || 27) - 27) / 5; return NC.b0 + NC.bls * Math.log(Math.max(sal, 5e4)) + NC.bag * ag + NC.bag2 * ag * ag; };
+// a signing is valued from past new arrivals at a similar salary (band) and age group (under 28 / 28+)
+function comps(sal, age) {
+  const sb = DATA.sal_bands.filter(b => sal > b).length, ab = (age || 27) >= 28 ? 1 : 0; const c = DATA.comps[sb + "_" + ab];
+  if (c && c.n >= 8) return { r: c.mean, lo: c.p10, hi: c.p90, n: c.n, dnp: c.dnp };
+  const r = regImpact(sal, age); return { r, lo: r - 1.28 * DATA.player_sd, hi: r + 1.28 * DATA.player_sd, n: c ? c.n : 0, dnp: c ? c.dnp : null };
+}
+const signingImpact = (sal, age) => comps(sal, age).r;
+
+// 80% band for a roster change: added players at their low/high value, removed players the other way round
+function changeBand(R) {
+  const lo = R.map(p => Object.assign({}, p)), hi = R.map(p => Object.assign({}, p));
+  // independent players rarely all miss together: with k changed players, each is moved 1/sqrt(k) of the way to its 10th/90th percentile
+  const k = Math.max(1, R.filter(p => p.added || p.out).length), f = 1 / Math.sqrt(k);
+  R.forEach((p, i) => {
+    const sd = 1.28 * DATA.player_sd * f;
+    const [l, h] = p.lo !== undefined ? [p.r - (p.r - p.lo) * f, p.r + (p.hi - p.r) * f] : [p.r - sd, p.r + sd];
+    if (p.added) { lo[i].r = l; hi[i].r = h; }
+    else if (p.out) { lo[i].r = p.r + sd; hi[i].r = p.r - sd; }
+  });
+  return [teamQ(lo), teamQ(hi)];
+}
+function slopePtsPerQ(res, Qs) {   // league-wide points per unit of team strength, from the current simulation
+  const n = Qs.length, mq = Qs.reduce((a, b) => a + b) / n, mp = res.reduce((a, b) => a + b.mean, 0) / n;
+  let sxy = 0, sxx = 0; Qs.forEach((q, i) => { sxy += (q - mq) * (res[i].mean - mp); sxx += (q - mq) ** 2; }); return sxy / sxx;
+}
+// ---------- render ----------
+const $ = id => document.getElementById(id);
+let base = null;
+function allQ(override) { return rosters.map((r, i) => i === sel && override ? teamQ(override) : teamQ(r)); }
+function render() {
+  const t0 = performance.now();
+  const Qs = allQ(); const res = simulate(Qs, 7);
+  // comparison: this club's original roster, every other club as it stands now
+  const Qo = Qs.slice(); Qo[sel] = teamQ(T[sel].players.map(p => Object.assign({}, p)));
+  const key = sel + "|" + Qo.map(q => q.toFixed(5)).join(",");
+  if (!base || base.key !== key) base = { key, res: simulate(Qo, 7) };
+  const me = res[sel], b0 = base.res[sel];
+  const order = res.map((r, i) => [r.mean, i]).sort((a, b) => b[0] - a[0]).map(x => x[1]);
+  const delta = (x, y, f, unit = "") => { const d = x - y; if (Math.abs(d) < (unit === "%" ? 0.005 : 0.05)) return "no change from current roster"; return `<span class="${d > 0 ? "delta-pos" : "delta-neg"}">${d > 0 ? "+" : "−"}${f(Math.abs(d))}</span> vs current roster`; };
+  $("t-pts").textContent = me.mean.toFixed(1);
+  const slope = slopePtsPerQ(res, Qs); const Qbase = Qo[sel], Qnow = Qs[sel];
+  const changed = rosters[sel].some(p => p.added);
+  let band = "";
+  if (changed) { const [ql, qh] = changeBand(rosters[sel]); teamQ(rosters[sel]);
+    const a = slope * (Math.min(ql, qh) - Qbase), b = slope * (Math.max(ql, qh) - Qbase);
+    band = ` (80% range ${sgn(a)} to ${sgn(b)})`; }
+  $("t-pts-d").innerHTML = `Likely season range ${me.lo.toFixed(0)}–${me.hi.toFixed(0)} · ${delta(me.mean, b0.mean, x => x.toFixed(1) + " pts")}${band}`;
+  $("t-po").textContent = Math.round(me.po * 100) + "%"; $("t-po-d").innerHTML = `Top 9 in the ${T[sel].conf} · ${delta(me.po, b0.po, x => Math.round(x * 100) + " pts", "%")}`;
+  $("t-cup").textContent = (me.cup * 100).toFixed(me.cup < .1 ? 1 : 0) + "%"; $("t-cup-d").innerHTML = delta(me.cup, b0.cup, x => (x * 100).toFixed(1) + " pts", "%");
+  $("t-rank").textContent = (order.indexOf(sel) + 1) + " of " + T.length; $("t-rank-d").textContent = "By mean projected points, whole league";
+  // league table
+  $("league").querySelector("tbody").innerHTML = order.map((i, k) => `<tr class="${i === sel ? "me" : ""}"><td class="n">${k + 1}</td><td>${T[i].name}</td><td class="n">${res[i].mean.toFixed(1)}</td><td class="n">${res[i].lo.toFixed(0)}–${res[i].hi.toFixed(0)}</td><td class="n">${Math.round(res[i].po * 100)}%</td></tr>`).join("");
+  // roster
+  const R = rosters[sel]; teamQ(R);
+  const rows = R.map((p, j) => [p, j]).sort((a, b) => (a[0].out - b[0].out) || (b[0].r - a[0].r));
+  $("roster").querySelector("tbody").innerHTML = rows.map(([p, j]) => `<tr class="${p.out ? "out" : ""} ${p.added ? "added" : ""}"><td>${p.n}${p.ce === 2026 ? ' <span class="pill" title="Contract listed as ending in 2026">ends 2026</span>' : ""}</td><td><span class="pill">${p.pos}</span></td><td class="n">${p.age ?? "–"}</td><td class="n">${fmt$(p.sal)}</td><td class="n">${imp(p.r)}</td><td class="n">${p.out ? "–" : Math.round(p.share * 100) + "%"}</td><td><button type="button" class="ghost mini" data-j="${j}">${p.out ? "Restore" : "Remove"}</button></td></tr>`).join("");
+  $("roster").querySelectorAll("button[data-j]").forEach(b => b.onclick = () => { const p = R[+b.dataset.j]; if (p.added) R.splice(+b.dataset.j, 1); else p.out = !p.out; render(); });
+  weakness(R, Qs); money(Qs, me);
+  $("status").textContent = `Simulated ${N_SIM.toLocaleString()} seasons in ${Math.round(performance.now() - t0)} ms`;
+}
+function groupContrib(roster) { teamQ(roster); const g = { GK: 0, D: 0, M: 0, F: 0 }; roster.filter(p => !p.out).forEach(p => g[p.pos] = (g[p.pos] || 0) + p.share * 11 * p.r); return g; }
+function weakness(R) {
+  const mine = groupContrib(R); const avg = { GK: 0, D: 0, M: 0, F: 0 };
+  rosters.forEach(r => { const g = groupContrib(r); for (const k in avg) avg[k] += g[k] / rosters.length; });
+  teamQ(R);
+  const diffs = Object.keys(avg).map(k => [k, mine[k] - avg[k]]); const worst = diffs.slice().sort((a, b) => a[1] - b[1])[0];
+  const max = Math.max(.02, ...diffs.map(d => Math.abs(d[1])));
+  $("posbars").innerHTML = diffs.map(([k, d]) => { const w = Math.abs(d) / max * 50; return `<div class="barrow"><span class="pill">${k}</span><div class="track"><div class="mid"></div><div class="fill" style="${d < 0 ? `right:50%;width:${w}%;background:var(--bad)` : `left:50%;width:${w}%;background:var(--good)`}"></div></div><span class="n" style="text-align:right">${d >= 0 ? "+" : "−"}${Math.abs(d).toFixed(3)}</span></div>`; }).join("");
+  // weakest regular starter slot vs league average at that slot
+  const ranked = (r) => r.filter(p => !p.out).slice().sort((a, b) => b.r - a.r).slice(0, 11).map(p => p.r);
+  const lg = Array(11).fill(0); rosters.forEach(r => ranked(r).forEach((v, i) => lg[i] += v / rosters.length));
+  const mineR = ranked(R); const act = R.filter(p => !p.out).slice().sort((a, b) => b.r - a.r);
+  let slot = 0, gap = 0; mineR.forEach((v, i) => { if (v - lg[i] < gap) { gap = v - lg[i]; slot = i; } });
+  const names = { GK: "goalkeeper", D: "defence", M: "midfield", F: "attack" };
+  $("weak-text").innerHTML = worst[1] < 0 ? `<strong>${names[worst[0]][0].toUpperCase() + names[worst[0]].slice(1)}</strong> is furthest below the league average. ` +
+    (gap < 0 ? `The weakest starter slot is #${slot + 1} (${act[slot]?.n ?? "–"}, impact ${imp(mineR[slot])} vs league ${imp(lg[slot])} for that slot).` : "")
+    : "Every position group is at or above the league average.";
+}
+function money(Qs, me) {
+  const B = Math.max(0, +$("budget").value || 0) * 1e6; const tb = $("money").querySelector("tbody");
+  if (B < 1e5) { tb.innerHTML = `<tr><td colspan="4">Set an extra budget of at least $0.1M to compare options.</td></tr>`; $("money-note").textContent = ""; return; }
+  const opts = [1, 2, 4].filter(k => B / k >= 1e5).map(k => ({ k, sal: B / k }));
+  const base = simulate(Qs, 7, 3000); const ref = base[sel]; const slope = slopePtsPerQ(base, Qs); const q0 = teamQ(rosters[sel].map(p => Object.assign({}, p)));
+  const out = opts.map(o => { const c = comps(o.sal, 27);
+    const mk = r => Array.from({ length: o.k }, () => ({ n: "signing", pos: "M", r, sal: o.sal }));
+    const R2 = rosters[sel].map(p => Object.assign({}, p)).concat(mk(c.r)); const Q2 = Qs.slice(); Q2[sel] = teamQ(R2); const r = simulate(Q2, 7, 3000)[sel];
+    const f = 1 / Math.sqrt(o.k);   // independent signings: the k-player total spreads with sqrt(k)
+    const qlo = teamQ(rosters[sel].map(p => Object.assign({}, p)).concat(mk(c.r - (c.r - c.lo) * f))), qhi = teamQ(rosters[sel].map(p => Object.assign({}, p)).concat(mk(c.r + (c.hi - c.r) * f)));
+    return Object.assign(o, { r: c.r, c, res: r, glo: slope * (qlo - q0), ghi: slope * (qhi - q0) }); });
+  const best = out.reduce((a, b) => (b.res.mean > a.res.mean ? b : a));
+  tb.innerHTML = out.map(o => `<tr class="${o === best ? "best" : ""}"><td>${o.k === 1 ? "One player" : o.k + " players"} at ${fmt$(o.sal)}</td><td class="n">${imp(o.r)}</td><td class="n">${sgn(o.res.mean - ref.mean)} <span class="note">(${sgn(o.glo)} to ${sgn(o.ghi)})</span></td><td class="n">${sgn((o.res.po - ref.po) * 100, 0)} pts</td></tr>`).join("");
+  const dn = best.c.dnp; 
+  $("money-note").textContent = `Best split on average: ${best.k === 1 ? "one player" : best.k + " players"} (${fmt$(best.sal)} each). Ranges come from how past arrivals at that salary actually did in their first MLS season (${best.c.n} comparable players${dn != null ? `; ${Math.round(dn * 100)}% of signings at that level did not play at all` : ""}). The model values all minutes alike, so a true elite signing may be worth more than shown.`;
+}
+// ---------- wiring ----------
+T.forEach((t, i) => { const o = document.createElement("option"); o.value = i; o.textContent = t.name; $("club").appendChild(o); });
+$("club").value = sel; $("club").onchange = e => { sel = +e.target.value; render(); };
+$("budget").oninput = () => { clearTimeout(window._bt); window._bt = setTimeout(render, 250); };
+$("dropce").onclick = () => { rosters[sel].forEach(p => { if (p.ce === 2026 && !p.added) p.out = true; }); render(); };
+$("reset").onclick = () => { rosters[sel] = T[sel].players.map(p => Object.assign({}, p)); render(); };
+const pool = []; T.forEach((t, i) => t.players.forEach(p => pool.push({ label: `${p.n} (${t.name})`, p, i })));
+$("pool").innerHTML = pool.map(x => `<option value="${x.label.replace(/"/g, "&quot;")}"></option>`).join("");
+$("addp").onclick = () => { const x = pool.find(z => z.label === $("search").value); if (!x) { $("status").textContent = "Pick a player from the list to add."; return; }
+  rosters[sel].push(Object.assign({}, x.p, { added: true, out: false })); $("search").value = ""; render(); };
+$("addsig").onclick = () => { const s = Math.max(.1, +$("sigsal").value || 1) * 1e6, a = +$("sigage").value || 27;
+  const c = comps(s, a); rosters[sel].push({ n: "New signing", pos: "M", age: a, sal: s, r: c.r, lo: c.lo, hi: c.hi, added: true }); render(); };
+render();
+</script>
+</body>
+</html>

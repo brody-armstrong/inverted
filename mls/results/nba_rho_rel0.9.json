@@ -1,0 +1,90 @@
+{
+ "reliability_assumed": 0.9,
+ "lineups": 6105,
+ "scale": 0.8000000000000003,
+ "naive_rho": 0.75,
+ "grid_means": {
+  "-3.0": -2.01,
+  "-2.0": -1.29,
+  "-1.0": -0.56,
+  "0.0": 0.2,
+  "0.5": 0.72,
+  "1.0": 1.17,
+  "1.5": 1.62,
+  "2.0": 2.12,
+  "3.0": 3.19,
+  "4.0": 4.22,
+  "5.0": 5.25
+ },
+ "confidence_set": [
+  0.5
+ ],
+ "P3": "fail",
+ "recovery_check": [
+  {
+   "true": -2.0,
+   "mult": 0.5,
+   "est": -1.0,
+   "covers": true,
+   "verdict": "weak-link"
+  },
+  {
+   "true": 1.0,
+   "mult": 0.5,
+   "est": 0.5,
+   "covers": false,
+   "verdict": "weak-link"
+  },
+  {
+   "true": 3.0,
+   "mult": 0.5,
+   "est": 2.75,
+   "covers": false,
+   "verdict": "inconclusive"
+  },
+  {
+   "true": -2.0,
+   "mult": 1.0,
+   "est": -1.5,
+   "covers": true,
+   "verdict": "weak-link"
+  },
+  {
+   "true": 1.0,
+   "mult": 1.0,
+   "est": 1.5,
+   "covers": true,
+   "verdict": "inconclusive"
+  },
+  {
+   "true": 3.0,
+   "mult": 1.0,
+   "est": 3.25,
+   "covers": true,
+   "verdict": "strong-link"
+  },
+  {
+   "true": -2.0,
+   "mult": 2.0,
+   "est": -1.25,
+   "covers": true,
+   "verdict": "weak-link"
+  },
+  {
+   "true": 1.0,
+   "mult": 2.0,
+   "est": 1.25,
+   "covers": true,
+   "verdict": "inconclusive"
+  },
+  {
+   "true": 3.0,
+   "mult": 2.0,
+   "est": 3.0,
+   "covers": true,
+   "verdict": "strong-link"
+  }
+ ],
+ "coverage": "7 of 9",
+ "false_directional": 1
+}

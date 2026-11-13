@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inverted MLS Player Profiles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: scouting desk — filterable shortlist on the left, the selected player's dossier on the right, role map below. */
+:root{
+  --bg:#EEF1EC; --surface:#FFFFFF; --ink:#14211C; --muted:#5C6B64; --line:#D5DDD7;
+  --accent:#0E6E55; --accent-soft:#D6EBE3; --value:#B4690E; --value-soft:#F6E7D2; --neg:#A23B3B;
+  --display:"Barlow Condensed","Arial Narrow",sans-serif; --body:"IBM Plex Sans",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1613; --surface:#17211D; --ink:#E5ECE8; --muted:#94A39C; --line:#2A3832;
+  --accent:#4CC2A0; --accent-soft:#1D3B32; --value:#E9A955; --value-soft:#3A2C18; --neg:#E07A7A; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0F1613; --surface:#17211D; --ink:#E5ECE8; --muted:#94A39C; --line:#2A3832;
+  --accent:#4CC2A0; --accent-soft:#1D3B32; --value:#E9A955; --value-soft:#3A2C18; --neg:#E07A7A; color-scheme:dark;}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 var(--body);padding:24px clamp(16px,3vw,40px) 48px}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:.01em;margin:0;text-wrap:balance}
+h1{font-size:34px;line-height:1.05;text-transform:uppercase}
+h2{font-size:22px;text-transform:uppercase}
+h3{font-size:16px;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:.06em}
+.num{font-variant-numeric:tabular-nums}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:20px;border-bottom:3px solid var(--ink);padding-bottom:14px}
+header p{margin:4px 0 0;color:var(--muted);max-width:68ch}
+.brand{color:var(--accent)}
+.grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px}
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.filters label{display:flex;flex-direction:column;gap:3px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:6px 8px;min-width:0}
+input[type=search]{width:180px}
+input:focus-visible,select:focus-visible,button:focus-visible,tr:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.tablewrap{overflow:auto;max-height:620px;border-top:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{position:sticky;top:0;background:var(--surface);text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:8px 6px;border-bottom:1px solid var(--line);cursor:pointer;white-space:nowrap;user-select:none}
+th.r,td.r{text-align:right}
+th[aria-sort] {color:var(--ink)}
+td{padding:7px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--accent-soft)}
+tbody tr.sel{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent)}
+.chip{display:inline-block;font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.pos{font-family:var(--display);font-weight:600;font-size:13px;color:var(--muted)}
+.vpos{color:var(--value);font-weight:600}.vneg{color:var(--neg)}
+.count{font-size:12px;color:var(--muted);margin:6px 0 0}
+.dossier header{border-bottom:1px solid var(--line);margin-bottom:12px}
+.dossier h2{font-size:30px;line-height:1}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0 16px}
+.fact{border-left:3px solid var(--line);padding-left:8px}
+.fact b{display:block;font-family:var(--display);font-size:22px;font-weight:600}
+.fact span{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.fact.value{border-color:var(--value)} .fact.value b{color:var(--value)}
+@media (max-width:480px){.facts{grid-template-columns:repeat(2,1fr)}}
+.bars{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 18px}
+@media (max-width:480px){.bars{grid-template-columns:1fr}}
+.bar{display:grid;grid-template-columns:118px 1fr 28px;align-items:center;gap:8px;font-size:12px}
+.bar .track{height:9px;background:var(--bg);border-radius:2px;position:relative;overflow:hidden}
+.bar .track::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--line)}
+.bar .fill{height:100%;background:var(--accent);border-radius:2px}
+.bar.q .fill{background:var(--value)}
+.bar .pv{text-align:right;color:var(--muted)}
+.sect{margin-top:16px}
+.sect h3{margin-bottom:8px}
+.comps{display:flex;flex-direction:column;gap:6px}
+.comp{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:7px 10px;border:1px solid var(--line);border-radius:4px;background:none;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.comp:hover{border-color:var(--accent)}
+.comp small{color:var(--muted)}
+.sim{font-family:var(--display);font-weight:600;color:var(--accent)}
+.note{font-size:12px;color:var(--muted);margin:10px 0 0;max-width:70ch}
+.roles{margin-top:24px}
+.rolegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:12px}
+.role{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.role .grp{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.role h4{margin:0;font-family:var(--display);font-size:19px;font-weight:600}
+.role p{margin:0;font-size:12px}
+.role .hi{color:var(--accent)} .role .lo{color:var(--muted)}
+.role button{all:unset;cursor:pointer;font-size:12px;color:var(--accent);font-weight:600}
+.role button:focus-visible{outline:2px solid var(--accent)}
+.tabs{display:flex;gap:4px}
+.tabs a{font-family:var(--display);font-weight:600;font-size:17px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);text-decoration:none;padding:6px 14px;border:1px solid var(--line);border-radius:4px;background:var(--surface)}
+.tabs a[aria-current="page"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tabs a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:20px}
+.kf{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:6px;padding:12px 14px}
+.kf b{display:block;font-family:var(--display);font-size:30px;font-weight:700;line-height:1.1}
+.kf span{font-size:13px;color:var(--muted)}
+.kf.warn{border-top-color:var(--value)}
+.sect2{margin-top:28px}
+.sect2 h2{margin-bottom:6px}
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media (max-width:900px){.twocol{grid-template-columns:1fr}}
+.fbar{display:inline-block;width:110px;height:8px;background:var(--bg);border-radius:2px;position:relative;vertical-align:middle;margin-right:8px}
+.fbar i{position:absolute;left:0;top:0;bottom:0;background:var(--accent);border-radius:2px}
+.fbar::after{content:"";position:absolute;left:90.9%;top:-3px;bottom:-3px;width:1px;background:var(--ink)}
+.dim{color:var(--muted)}
+.hbars{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.hb{display:grid;grid-template-columns:150px 1fr 54px;gap:10px;align-items:center;font-size:12px}
+.hb .tr{height:14px;background:var(--bg);border-radius:2px;position:relative}
+.hb .tr i{position:absolute;left:0;top:0;bottom:0;border-radius:2px;background:var(--accent)}
+.hb .tr i.alt{background:var(--value)}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.linkish{all:unset;cursor:pointer;color:var(--accent);font-weight:600}
+.linkish:focus-visible{outline:2px solid var(--accent)}
+footer{margin-top:28px;font-size:12px;color:var(--muted);max-width:90ch}
+footer a{color:var(--accent)}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1><span class="brand">Inverted</span> · MLS <span class="num" id="season"></span></h1>
+    <p id="tagline">Every MLS outfielder with 900+ minutes, sorted into roles by what they do on the ball, rated by goals added (g+), and priced against their guaranteed salary.</p>
+  </div>
+  <nav class="tabs" aria-label="Views">
+    <a href="#profiles" id="tab-profiles">MLS profiles</a>
+    <a href="#pathway" id="tab-pathway">Pathway to MLS</a>
+    <a href="#teams" id="tab-teams">Teams</a>
+  </nav>
+</header>
+
+<main id="view-profiles">
+<div class="grid">
+  <section class="panel" aria-label="Player shortlist">
+    <div class="filters">
+      <label for="q">Search<input type="search" id="q" placeholder="Player or club"></label>
+      <label for="grp">Position group<select id="grp"><option value="">All</option></select></label>
+      <label for="role">Role<select id="role"><option value="">All</option></select></label>
+      <label for="sal">Max salary<select id="sal">
+        <option value="">Any</option><option value="250000">$250k</option><option value="500000">$500k</option>
+        <option value="1000000" selected>$1M</option><option value="2000000">$2M</option></select></label>
+      <label for="mins">Min minutes<select id="mins"><option value="900">900</option><option value="1500" selected>1,500</option><option value="2500">2,500</option></select></label>
+      <label for="age">Max age<select id="age"><option value="">Any</option><option value="21">21</option><option value="24">24</option><option value="27">27</option></select></label>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr>
+          <th data-k="n">Player</th><th data-k="p">Pos</th><th data-k="r">Role</th>
+          <th data-k="a" class="r">Age</th><th data-k="s" class="r">Salary</th>
+          <th data-k="gp" class="r">g+/96</th><th data-k="v" class="r" aria-sort="descending">Value ▾</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p class="count" id="count"></p>
+  </section>
+
+  <section class="panel dossier" id="dossier" aria-live="polite"></section>
+</div>
+
+<section class="roles">
+  <h2>Role map</h2>
+  <p class="note">Roles come from clustering each position group on style alone (volume, pass length and direction, touch share), so a player's role says how he plays, not how well. Click a role to filter the shortlist.</p>
+  <div class="rolegrid" id="roles"></div>
+</section>
+
+<footer>
+  <p><b>How to read it.</b> g+/96 is American Soccer Analysis goals added above average per 96 minutes, shrunk toward the position-group mean (900-minute prior) so short samples don't top the list. Percentiles compare a player only with his position group. <b>Value</b> is the extra g+ a player produced over the season beyond what a player on his salary typically produces in his position group (robust regression on log salary). It is a shortlist signal, not a verdict: it ignores roster designation, transfer fees, contract length and age curves.</p>
+  <p>Data: <a href="https://www.americansocceranalysis.com/">American Soccer Analysis</a> public API (event-derived xG, xPass, g+) and MLSPA salary release of April 2026. Players traded mid-season are shown with their most recent club.</p>
+</footer>
+</main>
+
+<main id="view-pathway" hidden>
+  <section class="summary" id="pw-summary"></section>
+
+  <div class="grid">
+    <section class="panel" aria-label="2026 prospects">
+      <h2>2026 prospects, projected to MLS</h2>
+      <div class="filters" style="margin-top:10px">
+        <label for="pw-q">Search<input type="search" id="pw-q" placeholder="Player or club"></label>
+        <label for="pw-lg">League<select id="pw-lg"><option value="">All</option><option value="uslc">USL Championship</option><option value="mlsnp">MLS NEXT Pro</option><option value="usl1">USL League One</option></select></label>
+        <label for="pw-grp">Position group<select id="pw-grp"><option value="">All</option></select></label>
+        <label for="pw-age">Max age<select id="pw-age"><option value="">Any</option><option value="20">20</option><option value="23" selected>23</option><option value="26">26</option></select></label>
+        <label for="pw-mls">MLS minutes in 2026<select id="pw-mls"><option value="">Any</option><option value="0">None yet</option><option value="500">Under 500</option></select></label>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <thead><tr>
+            <th data-k="n">Player</th><th data-k="lg">League</th><th data-k="p">Pos</th><th data-k="a" class="r">Age</th>
+            <th data-k="gp" class="r">g+/96 now</th><th data-k="pgp" class="r">Proj. MLS g+</th><th data-k="pct" class="r" aria-sort="descending">MLS pct ▾</th>
+          </tr></thead>
+          <tbody id="pw-rows"></tbody>
+        </table>
+      </div>
+      <p class="count" id="pw-count"></p>
+    </section>
+    <section class="panel dossier" id="pw-dossier" aria-live="polite"></section>
+  </div>
+
+  <section class="sect2">
+    <h2>How stats translate to MLS</h2>
+    <p class="note">The factor is how much of a per-96 rate a player keeps after moving up, from every player with 900+ minutes in the lower league who logged 450+ MLS minutes that season or the next. 90% bootstrap interval in brackets. Predictability is how much the projection beats simply guessing the MLS average for his position, tested on MLS seasons held out of the fit.</p>
+    <div class="tablewrap" style="max-height:none"><table id="pw-table"></table></div>
+  </section>
+
+  <section class="sect2 twocol">
+    <div>
+      <h2>Who actually gets MLS minutes</h2>
+      <p class="note">Share of lower-league seasons (900+ min) followed by 450+ MLS minutes the next year, split into fifths by the player's lower-league g+/96.</p>
+      <div id="pw-surv"></div>
+    </div>
+    <div>
+      <h2>Track record</h2>
+      <p class="note">Every past move-up, grouped into quarters by projected MLS g+/96, against what they actually did in MLS.</p>
+      <div id="pw-tiers"></div>
+    </div>
+  </section>
+
+  <section class="sect2">
+    <h2>Biggest MLS impact after moving up</h2>
+    <div class="tablewrap" style="max-height:none"><table id="pw-cases"></table></div>
+  </section>
+
+  <footer>
+    <p><b>Method.</b> For each lower league, MLS per-96 output is modeled as a weighted linear function of the same stat in the lower league plus position-group effects (weights: harmonic mean of the two seasons' minutes). Slopes below 1 build in regression to the mean, so projections are deliberately conservative. USL League One has only 14 direct moves to MLS, so its players are chained through the USL Championship model (68 League One to Championship moves), and the chain was checked against those 14 direct moves. "MLS pct" places the projection within the 2026 MLS distribution for his position group. Comparables are the 2026 MLS players whose actual style profile is closest to his projected one.</p>
+    <p><b>Caveats.</b> Only players who earned MLS minutes appear in the fit, so the model describes players clubs chose to promote. Goals added is the least predictable stat here; style and volume numbers carry over far more reliably. Treat the list as a place to start watching video.</p>
+  </footer>
+</main>
+
+<main id="view-teams" hidden>
+  <section class="summary" id="tm-summary"></section>
+
+  <div class="grid">
+    <section class="panel" aria-label="2026 MLS table">
+      <h2>2026 table, under the hood</h2>
+      <div class="tablewrap" style="max-height:760px;margin-top:10px">
+        <table>
+          <thead><tr><th data-k="rank" class="r" aria-sort="ascending"># ▴</th><th data-k="team">Team</th><th data-k="pts" class="r">Pts</th><th data-k="luck" class="r">Pts − xPts</th>
+          <th data-k="xgd" class="r">xGD/g</th><th data-k="pay" class="r">Payroll</th><th data-k="gap">Weakest unit</th></tr></thead>
+          <tbody id="tm-rows"></tbody>
+        </table>
+      </div>
+      <p class="count">Payroll: guaranteed compensation, MLSPA release of April 2026. Pts − xPts: points won above or below what chance quality predicted. Weakest unit: the position group furthest below the top-eight standard, weighted by how much that group drives points.</p>
+    </section>
+    <section class="panel dossier" id="tm-dossier" aria-live="polite"></section>
+  </div>
+
+  <section class="sect2 twocol">
+    <div>
+      <h2>What separates the top from the bottom</h2>
+      <p class="note">Top-quarter vs bottom-quarter teams by points per game in each season, ${N} team-seasons from 2017 to 2026. Bar length is the gap in standard deviations.</p>
+      <div id="tm-contrast"></div>
+    </div>
+    <div>
+      <h2>How the best squads are built</h2>
+      <p class="note">Share of each position group's minutes (players with 900+ min) going to each role in 2026, top eight teams vs bottom eight.</p>
+      <div id="tm-roles"></div>
+    </div>
+  </section>
+
+  <footer>
+    <p><b>Method.</b> Team numbers are American Soccer Analysis season totals per game. Driver strength is the correlation with points per game after standardizing within each season. Squad quality is the minutes-weighted g+/96 of everyone who played in a position group; a regression of points per game on the five groups (R² ${R2}) converts each team's shortfall against the top-eight average into points per game. Targets are MLS players on $1M or less with 1,500+ minutes who outperform the team's current level in that group, preferring the role the team lacks, plus USL Championship and League One prospects aged 26 or under from the pathway model.</p>
+    <p><b>Caveats.</b> These are associations across seasons, not causes. A missing role can be a coaching choice rather than a hole, so read the role gap as a question to put to the staff. Squad quality credits a player's whole season to his last club when he was traded.</p>
+  </footer>
+</main>
+
+<script>
+const D = __DATA__;
+const P = D.players;
+const $ = s => document.querySelector(s);
+const money = s => s==null ? "—" : s>=1e6 ? "$"+(s/1e6).toFixed(s>=1e7?0:1)+"M" : "$"+Math.round(s/1e3)+"k";
+const sgn = (v,k=2) => v==null ? "—" : (v>0?"+":"")+v.toFixed(k);
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+$("#season").textContent = D.season;
+
+const groups = ["Strikers","Wingers","Midfield","Fullbacks","Centre-backs"];
+groups.forEach(g=>$("#grp").insertAdjacentHTML("beforeend",`<option>${g}</option>`));
+function fillRoles(){
+  const g=$("#grp").value, cur=$("#role").value;
+  const names=[...new Set(P.filter(p=>!g||p.g===g).map(p=>p.r))].sort();
+  $("#role").innerHTML='<option value="">All</option>'+names.map(n=>`<option${n===cur?" selected":""}>${esc(n)}</option>`).join("");
+}
+fillRoles();
+
+let sortK="v", sortDir=-1, selected=null;
+function filtered(){
+  const q=$("#q").value.trim().toLowerCase(), g=$("#grp").value, r=$("#role").value,
+        sal=+$("#sal").value||Infinity, mins=+$("#mins").value, age=+$("#age").value||Infinity;
+  return P.filter(p=>(!q||p.n.toLowerCase().includes(q)||(p.tn||"").toLowerCase().includes(q)||(p.t||"").toLowerCase()===q)
+    &&(!g||p.g===g)&&(!r||p.r===r)&&(sal===Infinity||(p.s!=null&&p.s<=sal))&&p.m>=mins&&(age===Infinity||(p.a!=null&&p.a<=age)));
+}
+function render(){
+  const rows=filtered().sort((a,b)=>{
+    const x=a[sortK], y=b[sortK];
+    if(x==null) return 1; if(y==null) return -1;
+    return (typeof x==="string"? x.localeCompare(y) : x-y)*sortDir;
+  });
+  $("#rows").innerHTML=rows.map(p=>`<tr tabindex="0" data-i="${P.indexOf(p)}" class="${p===selected?"sel":""}">
+    <td><b>${esc(p.n)}</b> <small class="pos">${esc(p.t||"")}</small></td><td class="pos">${p.p}</td>
+    <td><span class="chip">${esc(p.r)}</span></td><td class="r num">${p.a??"—"}</td><td class="r num">${money(p.s)}</td>
+    <td class="r num">${sgn(p.gp,3)}</td><td class="r num ${p.v>0?"vpos":p.v<0?"vneg":""}">${sgn(p.v,1)}</td></tr>`).join("");
+  $("#count").textContent=`${rows.length} of ${P.length} players · Value = season g+ above salary-expected`;
+}
+document.querySelectorAll("th").forEach(th=>th.addEventListener("click",()=>{
+  const k=th.dataset.k; sortDir = k===sortK ? -sortDir : (["n","p","r"].includes(k)?1:-1); sortK=k;
+  document.querySelectorAll("th").forEach(t=>{t.removeAttribute("aria-sort"); t.textContent=t.textContent.replace(/ [▾▴]$/,"");});
+  th.setAttribute("aria-sort",sortDir>0?"ascending":"descending"); th.textContent+= sortDir>0?" ▴":" ▾"; render();
+}));
+["#q","#grp","#role","#sal","#mins","#age"].forEach(s=>$(s).addEventListener("input",()=>{ if(s==="#grp") fillRoles(); render(); }));
+$("#rows").addEventListener("click",e=>{const tr=e.target.closest("tr"); if(tr) select(P[+tr.dataset.i]);});
+$("#rows").addEventListener("keydown",e=>{if(e.key==="Enter"){const tr=e.target.closest("tr"); if(tr) select(P[+tr.dataset.i]);}});
+
+function select(p){
+  selected=p; render();
+  const bar=(lbl,v,i)=>`<div class="bar ${i>=10?"q":""}"><span>${lbl}</span><div class="track"><div class="fill" style="width:${v??0}%"></div></div><span class="pv num">${v??"—"}</span></div>`;
+  const style=D.bars.slice(0,10).map((b,i)=>bar(b,p.pc[i],i)).join("");
+  const qual=D.bars.slice(10).map((b,i)=>bar(b,p.pc[i+10],i+10)).join("");
+  const comps=p.c.map(([j,s])=>{const c=P[j];return `<button class="comp" data-i="${j}"><span><b>${esc(c.n)}</b> <small>${esc(c.t||"")} · ${esc(c.r)} · ${c.a??"—"}</small></span><small class="num">${money(c.s)}</small><span class="sim num">${Math.round(s*100)}%</span></button>`}).join("");
+  const exp = p.ge==null ? "" : `Salary-expected g+/96 for his group is ${sgn(p.ge,3)}; he produced ${sgn(p.gp,3)} (raw ${sgn(p.gpr,3)} before shrinkage).`;
+  $("#dossier").innerHTML=`
+    <header><div><h2>${esc(p.n)}</h2>
+      <p>${esc(p.tn||p.t||"")} · ${p.p} · <span class="chip">${esc(p.r)}</span>${p.nat?` · ${esc(p.nat)}`:""}${p.tr?" · traded in season":""}</p></div></header>
+    <div class="facts">
+      <div class="fact"><b class="num">${p.a??"—"}</b><span>Age</span></div>
+      <div class="fact"><b class="num">${money(p.s)}</b><span>Guaranteed comp</span></div>
+      <div class="fact"><b class="num">${p.m.toLocaleString()}</b><span>Minutes</span></div>
+      <div class="fact value"><b class="num">${sgn(p.v,1)}</b><span>Value (g+ over pay)</span></div>
+    </div>
+    <p class="note num" style="margin-top:0">${p.gls} goals, ${p.ast} assists · ${p.xg.toFixed(2)} xG and ${p.xa.toFixed(2)} xA per 96. ${exp}</p>
+    <div class="sect"><h3>Style · percentile vs ${esc(p.g.toLowerCase())}</h3><div class="bars">${style}</div></div>
+    <div class="sect"><h3>Quality · goals added percentile</h3><div class="bars">${qual}</div></div>
+    <div class="sect"><h3>Closest comparables in MLS</h3><div class="comps">${comps}</div>
+      <p class="note">Similarity is cosine similarity on standardized style and quality metrics within the position group.</p></div>`;
+  document.querySelectorAll(".comp").forEach(b=>b.addEventListener("click",()=>select(P[+b.dataset.i])));
+}
+
+$("#roles").innerHTML=groups.flatMap(g=>(D.roles[g]||[]).sort((a,b)=>b.n-a.n).map(r=>`
+  <div class="role"><span class="grp">${g} · ${r.n} players</span><h4>${esc(r.name)}</h4>
+  <p><span class="hi">High:</span> ${r.high.join(", ")}</p><p><span class="lo">Low:</span> ${r.low.join(", ")}</p>
+  <p class="lo">${r.ex.map(esc).join(", ")}</p>
+  <button data-g="${g}" data-r="${esc(r.name)}">Show in shortlist →</button></div>`)).join("");
+document.querySelectorAll(".role button").forEach(b=>b.addEventListener("click",()=>{
+  $("#grp").value=b.dataset.g; fillRoles(); $("#role").value=b.dataset.r; $("#sal").value=""; $("#mins").value="900"; $("#age").value=""; $("#q").value="";
+  render(); window.scrollTo({top:0,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+}));
+
+render();
+const first = filtered().sort((a,b)=>(b.v??-99)-(a.v??-99))[0];
+select(first);
+
+/* ---------------- Pathway view ---------------- */
+const W = __PATHWAY__;
+const PR = W.prospects, LN = W.league_names;
+const lgShort = {uslc:"USLC", usl1:"USL1", mlsnp:"NEXT Pro"};
+groups.forEach(g=>$("#pw-grp").insertAdjacentHTML("beforeend",`<option>${g}</option>`));
+
+const T = W.table, f = (lg,stat)=>T[lg].rows.find(r=>r.stat===stat);
+const pctKeep = (lg,stat)=>Math.round(f(lg,stat).factor*100);
+$("#pw-summary").innerHTML = `
+  <div class="kf"><b class="num">${pctKeep("uslc","xG")}% / ${pctKeep("mlsnp","xG")}%</b><span>of a player's xG per 96 survives the move to MLS from the USL Championship / MLS NEXT Pro.</span></div>
+  <div class="kf"><b class="num">${pctKeep("uslc","Passes")}%</b><span>of passing volume carries over. Players stay involved; the end product is what shrinks.</span></div>
+  <div class="kf"><b class="num">${pctKeep("uslc","Interruptions")}%</b><span>of defensive interruptions carry over. Defensive work rate translates almost one to one.</span></div>
+  <div class="kf warn"><b class="num">${(T.uslc.surv_q[4]*100).toFixed(0)}% / ${(T.mlsnp.surv_q[4]*100).toFixed(0)}%</b><span>of the top fifth of USL Championship / NEXT Pro performers got 450+ MLS minutes the next season.</span></div>`;
+
+const fmtF = r => r.factor==null ? '<span class="dim">—</span>' :
+  `<span class="fbar"><i style="width:${Math.min(r.factor/1.1,1)*100}%"></i></span><span class="num">${r.factor.toFixed(2)}</span> <small class="dim num">[${r.ci[0].toFixed(2)}–${r.ci[1].toFixed(2)}]</small>`;
+const fmtS = r => r.skill==null ? '<span class="dim">n/a</span>' : `<span class="num">${r.skill>0?"+":""}${Math.round(r.skill*100)}%</span>`;
+$("#pw-table").innerHTML = `<thead><tr><th>Stat</th><th>USL Championship <small class="dim">(${T.uslc.n} moves)</small></th><th class="r">Predictability</th>
+  <th>MLS NEXT Pro <small class="dim">(${T.mlsnp.n})</small></th><th class="r">Predictability</th><th>USL League One <small class="dim">(${T.usl1.n}, low confidence)</small></th></tr></thead><tbody>` +
+  T.uslc.rows.map((r,i)=>`<tr><td>${r.stat}</td><td>${fmtF(r)}</td><td class="r">${fmtS(r)}</td><td>${fmtF(T.mlsnp.rows[i])}</td><td class="r">${fmtS(T.mlsnp.rows[i])}</td><td class="dim">${fmtF(T.usl1.rows[i])}</td></tr>`).join("") +
+  `</tbody>`;
+
+const qn = ["Bottom fifth","Second","Middle","Fourth","Top fifth"];
+const sMax = Math.max(...T.uslc.surv_q, ...T.mlsnp.surv_q);
+$("#pw-surv").innerHTML = `<div class="hbars">` + qn.map((q,i)=>`
+  <div class="hb"><span>${q} · USLC</span><div class="tr"><i style="width:${T.uslc.surv_q[i]/sMax*100}%"></i></div><span class="num r">${(T.uslc.surv_q[i]*100).toFixed(1)}%</span></div>
+  <div class="hb"><span>${q} · NEXT Pro</span><div class="tr"><i class="alt" style="width:${T.mlsnp.surv_q[i]/sMax*100}%"></i></div><span class="num r">${(T.mlsnp.surv_q[i]*100).toFixed(1)}%</span></div>`).join("") +
+  `</div><div class="legend"><span><i style="background:var(--accent)"></i>USL Championship</span><span><i style="background:var(--value)"></i>MLS NEXT Pro</span></div>`;
+
+const tq = ["Lowest quarter","Second","Third","Highest quarter"];
+const tv = W.tiers.flatMap(t=>[t.pred,t.actual]), tmin=Math.min(...tv), tmax=Math.max(...tv);
+const tpos = v => (v - tmin)/(tmax - tmin)*100;
+$("#pw-tiers").innerHTML = `<table><thead><tr><th>Projection tier</th><th class="r">Moves</th><th class="r">Projected g+/96</th><th class="r">Actual MLS g+/96</th></tr></thead><tbody>` +
+  W.tiers.map((t,i)=>`<tr><td>${tq[i]}</td><td class="r num">${t.n}</td><td class="r num">${sgn(t.pred,3)}</td><td class="r num"><b>${sgn(t.actual,3)}</b></td></tr>`).join("") +
+  `</tbody></table><p class="note">Projected and actual line up quarter by quarter. Note this check uses the same moves the model was fit on; the held-out test is the predictability column above.</p>`;
+
+$("#pw-cases").innerHTML = `<thead><tr><th>Player</th><th>Came from</th><th class="r">Season</th><th>Group</th><th class="r">Lower-league g+/96</th><th class="r">Projected MLS</th><th class="r">Actual MLS</th><th class="r">MLS minutes</th></tr></thead><tbody>` +
+  W.cases.map(c=>`<tr><td><b>${esc(c.n)}</b></td><td>${LN[c.lg]}</td><td class="r num">${c.s}</td><td>${c.g}</td><td class="r num">${sgn(c.lo,3)}</td><td class="r num">${sgn(c.pr,3)}</td><td class="r num"><b>${sgn(c.ac,3)}</b></td><td class="r num">${c.mm.toLocaleString()}</td></tr>`).join("") + `</tbody>`;
+
+let pwK="pct", pwDir=-1, pwSel=null;
+function pwFiltered(){
+  const q=$("#pw-q").value.trim().toLowerCase(), lg=$("#pw-lg").value, g=$("#pw-grp").value,
+        age=+$("#pw-age").value||Infinity, mm=$("#pw-mls").value;
+  return PR.filter(p=>(!q||p.n.toLowerCase().includes(q)||p.t.toLowerCase().includes(q))&&(!lg||p.lg===lg)&&(!g||p.g===g)
+    &&(age===Infinity||(p.a!=null&&p.a<=age))&&(mm===""||(mm==="0"?p.mm===0:p.mm<500)));
+}
+function pwRender(){
+  const rows=pwFiltered().sort((a,b)=>{const x=a[pwK],y=b[pwK]; if(x==null) return 1; if(y==null) return -1;
+    return (typeof x==="string"?x.localeCompare(y):x-y)*pwDir;});
+  $("#pw-rows").innerHTML=rows.map(p=>`<tr tabindex="0" data-i="${PR.indexOf(p)}" class="${p===pwSel?"sel":""}">
+    <td><b>${esc(p.n)}</b> <small class="pos">${esc(p.t)}</small></td><td>${lgShort[p.lg]}</td><td class="pos">${p.p}</td>
+    <td class="r num">${p.a??"—"}</td><td class="r num">${sgn(p.gp,3)}</td><td class="r num">${sgn(p.pgp,3)}</td>
+    <td class="r num"><b>${p.pct??"—"}</b></td></tr>`).join("");
+  $("#pw-count").textContent=`${rows.length} of ${PR.length} lower-league players with 900+ minutes in 2026`;
+}
+document.querySelectorAll("#view-pathway th[data-k]").forEach(th=>th.addEventListener("click",()=>{
+  const k=th.dataset.k; pwDir = k===pwK ? -pwDir : (["n","lg","p"].includes(k)?1:-1); pwK=k;
+  document.querySelectorAll("#view-pathway th[data-k]").forEach(t=>{t.removeAttribute("aria-sort"); t.textContent=t.textContent.replace(/ [▾▴]$/,"");});
+  th.setAttribute("aria-sort",pwDir>0?"ascending":"descending"); th.textContent+=pwDir>0?" ▴":" ▾"; pwRender();
+}));
+["#pw-q","#pw-lg","#pw-grp","#pw-age","#pw-mls"].forEach(s=>$(s).addEventListener("input",pwRender));
+$("#pw-rows").addEventListener("click",e=>{const tr=e.target.closest("tr"); if(tr) pwSelect(PR[+tr.dataset.i]);});
+$("#pw-rows").addEventListener("keydown",e=>{if(e.key==="Enter"){const tr=e.target.closest("tr"); if(tr) pwSelect(PR[+tr.dataset.i]);}});
+
+function pwSelect(p){
+  pwSel=p; pwRender();
+  const bars=W.style_labels.map((l,i)=>`<div class="bar"><span>${l}</span><div class="track"><div class="fill" style="width:${p.sp[i]??0}%"></div></div><span class="pv num">${p.sp[i]??"—"}</span></div>`).join("");
+  const comps=p.c.map(([j,s])=>{const c=P[j];return `<button class="comp" data-j="${j}"><span><b>${esc(c.n)}</b> <small>${esc(c.t||"")} · ${esc(c.r)} · ${c.a??"—"}</small></span><small class="num">${money(c.s)}</small><span class="sim num">${Math.round(s*100)}%</span></button>`}).join("");
+  const chained = p.lg==="usl1" ? " Projected through the USL Championship model." : "";
+  $("#pw-dossier").innerHTML=`
+    <header><div><h2>${esc(p.n)}</h2><p>${esc(p.t)} · ${LN[p.lg]} · ${p.p} · ${esc(p.g)}${p.mm?` · ${p.mm.toLocaleString()} MLS min in 2026`:""}</p></div></header>
+    <div class="facts">
+      <div class="fact"><b class="num">${p.a??"—"}</b><span>Age</span></div>
+      <div class="fact"><b class="num">${p.m.toLocaleString()}</b><span>Minutes 2026</span></div>
+      <div class="fact"><b class="num">${sgn(p.gp,3)}</b><span>g+/96 now</span></div>
+      <div class="fact value"><b class="num">${p.pct??"—"}</b><span>Expected MLS pct</span></div>
+    </div>
+    <p class="note num" style="margin-top:0">Now: ${p.xg.toFixed(2)} xG and ${p.xa.toFixed(2)} xA per 96. Projected in MLS: ${p.pxg.toFixed(2)} xG, ${p.pxa.toFixed(2)} xA and ${sgn(p.pgp,3)} g+ per 96.${chained}</p>
+    <div class="sect"><h3>Projected MLS style · percentile vs MLS ${esc(p.g.toLowerCase())}</h3><div class="bars">${bars}</div></div>
+    <div class="sect"><h3>Would play most like (2026 MLS)</h3><div class="comps">${comps}</div>
+      <p class="note">Click a comparable to open his MLS profile.</p></div>`;
+  document.querySelectorAll("#pw-dossier .comp").forEach(b=>b.addEventListener("click",()=>{ location.hash="profiles"; select(P[+b.dataset.j]); }));
+}
+pwRender();
+pwSelect(pwFiltered().sort((a,b)=>(b.pct??-1)-(a.pct??-1))[0]);
+
+/* ---------------- Teams view ---------------- */
+const TM = __TEAMS__;
+const TT = TM.teams;
+TT.forEach(t=>{ t.luck = +(t.pts - t.xpts).toFixed(1); t.gap = t.gaps[0]?.group || ""; });
+document.querySelectorAll("#view-teams footer p, #view-teams .note").forEach(el=>{
+  el.innerHTML = el.innerHTML.replace("${N}", TM.n_team_seasons).replace("${R2}", TM.squad_r2.toFixed(2));
+});
+const drv = k => TM.drivers.find(d=>d.label===k).r;
+const gw = TM.group_weight, topG = Object.entries(gw).sort((a,b)=>b[1]-a[1]);
+const RT=TM.role_top, RB=TM.role_bot;
+$("#tm-summary").innerHTML = `
+  <div class="kf"><b class="num">r = ${drv("xG difference").toFixed(2)}</b><span>xG difference is the strongest link to points. Possession is ${drv("Possession (pass share)").toFixed(2)}; directness barely registers.</span></div>
+  <div class="kf"><b>${topG[0][0]} & ${topG[1][0].toLowerCase()}</b><span>Squad quality in these two groups moves the table most. Wingers move it least.</span></div>
+  <div class="kf"><b class="num">${Math.round(RT["Centre-backs|Wide CB / hybrid"]*100)}% vs ${Math.round(RB["Centre-backs|Wide CB / hybrid"]*100)}%</b><span>of centre-back minutes go to wide, ball-carrying CBs at the top eight vs the bottom eight. Bottom teams lean on direct stoppers.</span></div>
+  <div class="kf warn"><b class="num">r = ${TM.persist["Points per game"].toFixed(2)}</b><span>This season's points barely predict next season's; goal and xG difference do slightly better (${TM.persist["xG difference"].toFixed(2)}). MLS tables are noisy.</span></div>`;
+
+const cmax = Math.max(...TM.contrast.map(c=>Math.abs(c.d)));
+$("#tm-contrast").innerHTML = `<div class="hbars">` + TM.contrast.slice(0,14).map(c=>`
+  <div class="hb"><span>${esc(c.label)}</span><div class="tr"><i class="${c.d<0?"alt":""}" style="width:${Math.abs(c.d)/cmax*100}%"></i></div><span class="num r">${c.d>0?"+":"−"}${Math.abs(c.d).toFixed(2)}</span></div>`).join("") +
+  `</div><div class="legend"><span><i style="background:var(--accent)"></i>Higher for top teams</span><span><i style="background:var(--value)"></i>Lower for top teams</span></div>`;
+
+const rolesBy = {};
+Object.keys(RT).forEach(k=>{const [g,r]=k.split("|"); (rolesBy[g]=rolesBy[g]||[]).push(r);});
+$("#tm-roles").innerHTML = groups.slice().reverse().map(g=>`<h3 style="margin:14px 0 4px">${g}</h3><div class="hbars">` +
+  (rolesBy[g]||[]).sort((a,b)=>(RT[g+"|"+b]-RB[g+"|"+b])-(RT[g+"|"+a]-RB[g+"|"+a])).map(r=>{const a=RT[g+"|"+r]||0,b=RB[g+"|"+r]||0;return `
+  <div class="hb"><span>${esc(r)}</span><div class="tr"><i style="width:${a*100}%;height:50%"></i><i class="alt" style="width:${b*100}%;top:50%"></i></div><span class="num r">${Math.round(a*100)} / ${Math.round(b*100)}</span></div>`}).join("") + `</div>`).join("") +
+  `<div class="legend"><span><i style="background:var(--accent)"></i>Top eight</span><span><i style="background:var(--value)"></i>Bottom eight</span></div>`;
+
+let tmK="rank", tmDir=1, tmSel=null;
+function tmRender(){
+  const rows=TT.slice().sort((a,b)=>{const x=a[tmK],y=b[tmK]; return (typeof x==="string"?x.localeCompare(y):x-y)*tmDir;});
+  $("#tm-rows").innerHTML=rows.map(t=>`<tr tabindex="0" data-i="${TT.indexOf(t)}" class="${t===tmSel?"sel":""}">
+    <td class="r num">${t.rank}</td><td><b>${esc(t.team)}</b></td><td class="r num">${t.pts}</td>
+    <td class="r num ${t.luck>0?"vpos":t.luck<0?"vneg":""}">${t.luck>0?"+":""}${t.luck}</td><td class="r num">${sgn(t.xgd)}</td><td class="r num">${t.pay==null?"—":"$"+t.pay+"M"}</td>
+    <td>${t.gap?`<span class="chip">${t.gap}</span>`:""}</td></tr>`).join("");
+}
+document.querySelectorAll("#view-teams th[data-k]").forEach(th=>th.addEventListener("click",()=>{
+  const k=th.dataset.k; tmDir = k===tmK ? -tmDir : (["rank","team","gap"].includes(k)?1:-1); tmK=k;
+  document.querySelectorAll("#view-teams th[data-k]").forEach(t=>{t.removeAttribute("aria-sort"); t.textContent=t.textContent.replace(/ [▾▴]$/,"");});
+  th.setAttribute("aria-sort",tmDir>0?"ascending":"descending"); th.textContent+=tmDir>0?" ▴":" ▾"; tmRender();
+}));
+$("#tm-rows").addEventListener("click",e=>{const tr=e.target.closest("tr"); if(tr) tmSelect(TT[+tr.dataset.i]);});
+$("#tm-rows").addEventListener("keydown",e=>{if(e.key==="Enter"){const tr=e.target.closest("tr"); if(tr) tmSelect(TT[+tr.dataset.i]);}});
+
+function tmSelect(t){
+  tmSel=t; tmRender();
+  const style=TM.style_labels.map((l,i)=>`<div class="bar"><span>${l}</span><div class="track"><div class="fill" style="width:${t.style[i]}%"></div></div><span class="pv num">${t.style[i]}</span></div>`).join("");
+  const qs=t.gaps.flatMap(g=>[g.q,g.top]), qmin=Math.min(...qs,-0.02), qmax=Math.max(...qs,0.02);
+  const pos=v=>(v-qmin)/(qmax-qmin)*100;
+  const squad=t.gaps.slice().sort((a,b)=>groups.indexOf(a.group)-groups.indexOf(b.group)).map(g=>`
+    <div class="hb" style="grid-template-columns:110px 1fr 90px"><span>${g.group}</span>
+      <div class="tr" style="background:var(--bg)"><i style="left:${Math.min(pos(0),pos(g.q))}%;width:${Math.abs(pos(g.q)-pos(0))}%;background:${g.q<0?"var(--neg)":"var(--accent)"}"></i>
+      <i style="left:calc(${pos(g.top)}% - 1px);width:3px;background:var(--ink)"></i></div>
+      <span class="num r ${g.ppg_cost<0?"vneg":""}">${g.ppg_cost<0?g.ppg_cost.toFixed(2)+" ppg":"at standard"}</span></div>`).join("");
+  const recs=t.recs.map(r=>`
+    <div class="sect"><h3>${r.group}: targets</h3>
+      <p class="note" style="margin:0 0 8px">Top-eight teams give ${Math.round(r.role_top*100)}% of ${r.group.toLowerCase()} minutes to a <b>${esc(r.role_gap)}</b>; ${esc(t.team)} gives ${Math.round(r.role_share*100)}%.</p>
+      <div class="comps">${r.mls.map(j=>{const c=P[j];return `<button class="comp" data-j="${j}"><span><b>${esc(c.n)}</b> <small>${esc(c.t||"")} · ${esc(c.r)} · ${c.a??"—"}</small></span><small class="num">${money(c.s)}</small><span class="sim num">${sgn(c.gp,3)}</span></button>`}).join("")}
+      ${r.pathway.map(j=>{const p=PR[j];return `<button class="comp" data-p="${j}"><span><b>${esc(p.n)}</b> <small>${esc(p.t)} · ${lgShort[p.lg]} · ${p.a??"—"}</small></span><small class="num">MLS pct</small><span class="sim num">${p.pct??"—"}</span></button>`}).join("")}</div></div>`).join("");
+  $("#tm-dossier").innerHTML=`
+    <header><div><h2>${esc(t.team)}</h2><p>${ordinal(t.rank)} on points · ${t.pts} pts from ${t.xpts} expected by chance quality${t.pay!=null?` · $${t.pay}M payroll, ${Math.round(t.top3*100)}% to the top three earners · ${t.pvp>0?"+":""}${t.pvp} pts vs what that payroll usually buys`:""}</p></div></header>
+    <div class="facts">
+      <div class="fact"><b class="num">${t.xgf.toFixed(2)}</b><span>xG for / game</span></div>
+      <div class="fact"><b class="num">${t.xga.toFixed(2)}</b><span>xG against / game</span></div>
+      <div class="fact"><b class="num">${sgn(t.fin,1)}</b><span>Goals vs xG</span></div>
+      <div class="fact value"><b class="num">${t.xgd_change==null?"—":sgn(t.xgd_change)}</b><span>xGD/g vs 2025</span></div>
+    </div>
+    <div class="sect"><h3>Style · percentile among 2026 teams</h3><div class="bars">${style}</div></div>
+    <div class="sect"><h3>Squad quality by unit · g+/96, black tick = top-eight average</h3><div class="hbars">${squad}</div></div>
+    ${recs || '<p class="note">No unit sits meaningfully below the top-eight standard.</p>'}
+    <p class="note">MLS targets show g+/96 (shrunk); pathway prospects show expected MLS percentile. Click any name to open his profile.</p>`;
+  document.querySelectorAll("#tm-dossier .comp[data-j]").forEach(b=>b.addEventListener("click",()=>{ location.hash="profiles"; select(P[+b.dataset.j]); }));
+  document.querySelectorAll("#tm-dossier .comp[data-p]").forEach(b=>b.addEventListener("click",()=>{ location.hash="pathway"; pwSelect(PR[+b.dataset.p]); }));
+}
+const ordinal = n => n + (["th","st","nd","rd"][(n%100-20)%10] || ["th","st","nd","rd"][n%100] || "th");
+tmRender();
+tmSelect(TT[0]);
+
+function route(){
+  const v = ["#pathway","#teams"].includes(location.hash) ? location.hash.slice(1) : "profiles";
+  ["profiles","pathway","teams"].forEach(x=>{
+    $("#view-"+x).hidden = v!==x;
+    if(v===x) $("#tab-"+x).setAttribute("aria-current","page"); else $("#tab-"+x).removeAttribute("aria-current");
+  });
+  $("#tagline").textContent = {
+    profiles: "Every MLS outfielder with 900+ minutes, sorted into roles by what they do on the ball, rated by goals added (g+), and priced against their guaranteed salary.",
+    pathway: "How USL Championship, USL League One and MLS NEXT Pro numbers translate to MLS, learned from every player who made the jump since 2017, and applied to this season's lower-league players.",
+    teams: "What separates winning MLS teams from losing ones since 2017, and where each 2026 squad falls short of the top-eight standard, with targets to close the gap."
+  }[v];
+}
+addEventListener("hashchange", ()=>{ route(); scrollTo(0,0); });
+route();
+</script>
+</body>
+</html>

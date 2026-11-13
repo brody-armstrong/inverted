@@ -1,0 +1,30 @@
+{
+ "crowds": {
+  "matches": 44383,
+  "home_points_share": 0.5814357327741555,
+  "home_ppg_minus_away": 0.4480093729581146,
+  "home_gd": 0.34152716130049793,
+  "market_home_ppg_minus_away": 0.4327297802682184
+ },
+ "ghost": {
+  "matches": 4225,
+  "home_points_share": 0.5357142857142857,
+  "home_ppg_minus_away": 0.19597633136094675,
+  "home_gd": 0.17325443786982248,
+  "market_home_ppg_minus_away": 0.2652046085111426
+ },
+ "mls_crowds": {
+  "matches": 5287,
+  "home_ppg_minus_away": 0.6990731984111973,
+  "home_gd": 0.5082277283903915,
+  "home_xgd": 0.42556589748439577,
+  "market_home_ppg_minus_away": 0.6744615602934927
+ },
+ "mls_empty": {
+  "matches": 248,
+  "home_ppg_minus_away": 0.8104838709677419,
+  "home_gd": 0.6008064516129032,
+  "home_xgd": 0.35353064516129035,
+  "market_home_ppg_minus_away": 0.5000815000216797
+ }
+}

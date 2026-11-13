@@ -1,0 +1,463 @@
+{
+ "r_pay_ppg": 0.13605013539381497,
+ "r_pay_xgd": 0.06623985375345849,
+ "ppg_per_doubling": 0.09597226601850196,
+ "pts_per_doubling_34": 3.263057044629067,
+ "eras": {
+  "2013-16": {
+   "r": 0.25333121197246333,
+   "n": 78,
+   "spread_max_min": 4.9257854820322695,
+   "median_payroll": 5577938.845000001,
+   "top3_share": 0.451062644604822
+  },
+  "2017-19": {
+   "r": 0.26118813520292183,
+   "n": 69,
+   "spread_max_min": 3.881501417945677,
+   "median_payroll": 9854738.24,
+   "top3_share": 0.442746826221105
+  },
+  "2021-23": {
+   "r": -0.2943748335826203,
+   "n": 83,
+   "spread_max_min": 3.1619185355578368,
+   "median_payroll": 14600008.0,
+   "top3_share": 0.4138406536923853
+  },
+  "2024-26": {
+   "r": 0.3394930407879292,
+   "n": 89,
+   "spread_max_min": 4.033807277811054,
+   "median_payroll": 17608129.0,
+   "top3_share": 0.43178921343373394
+  }
+ },
+ "stars_vs_depth_beta": {
+  "top3": 0.05470339619275938,
+  "rest": 0.13030480305047143
+ },
+ "r_top3": 0.10037348333563963,
+ "r_rest": 0.14947761028895173,
+ "r_concentration_given_pay": -0.03537806535572946,
+ "conc_tiers": {
+  "Balanced": {
+   "n": 107,
+   "top3_share": 0.3131154018942182,
+   "rel_pay": 0.7549457129940307,
+   "ppg": 1.349092908191314,
+   "resid": 0.03571942329586078
+  },
+  "Middle": {
+   "n": 106,
+   "top3_share": 0.40203219504924637,
+   "rel_pay": 0.869235680696686,
+   "ppg": 1.3881798002219754,
+   "resid": 0.08026304825472304
+  },
+  "Star-heavy": {
+   "n": 106,
+   "top3_share": 0.5886006685151058,
+   "rel_pay": 1.3781304392055667,
+   "ppg": 1.37708102108768,
+   "resid": -0.11631944724205416
+  }
+ },
+ "pay_quartiles": {
+  "0": 1.324,
+  "1": 1.333,
+  "2": 1.388,
+  "3": 1.442
+ },
+ "top_third_rate_by_pay_q": {
+  "0": 0.226,
+  "1": 0.266,
+  "2": 0.378,
+  "3": 0.439
+ },
+ "eff_2026": [
+  {
+   "team": "Nashville",
+   "pts": 77,
+   "payroll": 22989086.0,
+   "top3_share": 0.595,
+   "exp_pts": 47.404,
+   "pts_vs_pay": 29.596,
+   "xgdpg": 0.373
+  },
+  {
+   "team": "Vancouver",
+   "pts": 64,
+   "payroll": 24559629.0,
+   "top3_share": 0.417,
+   "exp_pts": 47.715,
+   "pts_vs_pay": 16.285,
+   "xgdpg": 0.926
+  },
+  {
+   "team": "Dallas",
+   "pts": 58,
+   "payroll": 14539074.0,
+   "top3_share": 0.322,
+   "exp_pts": 45.247,
+   "pts_vs_pay": 12.753,
+   "xgdpg": 0.39
+  },
+  {
+   "team": "New England",
+   "pts": 58,
+   "payroll": 19411614.4,
+   "top3_share": 0.439,
+   "exp_pts": 46.608,
+   "pts_vs_pay": 11.392,
+   "xgdpg": -0.133
+  },
+  {
+   "team": "Miami",
+   "pts": 60,
+   "payroll": 54574540.0,
+   "top3_share": 0.767,
+   "exp_pts": 51.474,
+   "pts_vs_pay": 8.526,
+   "xgdpg": 0.379
+  },
+  {
+   "team": "Chicago",
+   "pts": 55,
+   "payroll": 21733136.0,
+   "top3_share": 0.494,
+   "exp_pts": 47.14,
+   "pts_vs_pay": 7.86,
+   "xgdpg": 0.533
+  },
+  {
+   "team": "St. Louis",
+   "pts": 54,
+   "payroll": 18809928.0,
+   "top3_share": 0.356,
+   "exp_pts": 46.46,
+   "pts_vs_pay": 7.54,
+   "xgdpg": 0.226
+  },
+  {
+   "team": "Charlotte",
+   "pts": 54,
+   "payroll": 21460657.0,
+   "top3_share": 0.392,
+   "exp_pts": 47.08,
+   "pts_vs_pay": 6.92,
+   "xgdpg": -0.115
+  },
+  {
+   "team": "San Jose",
+   "pts": 52,
+   "payroll": 15825282.0,
+   "top3_share": 0.395,
+   "exp_pts": 45.646,
+   "pts_vs_pay": 6.354,
+   "xgdpg": 0.29
+  },
+  {
+   "team": "Philadelphia",
+   "pts": 50,
+   "payroll": 11696829.0,
+   "top3_share": 0.234,
+   "exp_pts": 44.223,
+   "pts_vs_pay": 5.777,
+   "xgdpg": 0.623
+  },
+  {
+   "team": "Houston",
+   "pts": 51,
+   "payroll": 20912912.0,
+   "top3_share": 0.356,
+   "exp_pts": 46.958,
+   "pts_vs_pay": 4.042,
+   "xgdpg": -0.352
+  },
+  {
+   "team": "Orlando City",
+   "pts": 46,
+   "payroll": 13732571.0,
+   "top3_share": 0.317,
+   "exp_pts": 44.978,
+   "pts_vs_pay": 1.022,
+   "xgdpg": -0.52
+  },
+  {
+   "team": "Columbus",
+   "pts": 47,
+   "payroll": 22338020.0,
+   "top3_share": 0.436,
+   "exp_pts": 47.269,
+   "pts_vs_pay": -0.269,
+   "xgdpg": 0.075
+  },
+  {
+   "team": "Portland",
+   "pts": 46,
+   "payroll": 18450879.0,
+   "top3_share": 0.425,
+   "exp_pts": 46.369,
+   "pts_vs_pay": -0.369,
+   "xgdpg": -0.126
+  },
+  {
+   "team": "Salt Lake",
+   "pts": 45,
+   "payroll": 15288195.0,
+   "top3_share": 0.292,
+   "exp_pts": 45.484,
+   "pts_vs_pay": -0.484,
+   "xgdpg": 0.009
+  },
+  {
+   "team": "Seattle",
+   "pts": 46,
+   "payroll": 19092219.0,
+   "top3_share": 0.364,
+   "exp_pts": 46.53,
+   "pts_vs_pay": -0.53,
+   "xgdpg": -0.196
+  },
+  {
+   "team": "Cincinnati",
+   "pts": 46,
+   "payroll": 23472623.0,
+   "top3_share": 0.532,
+   "exp_pts": 47.502,
+   "pts_vs_pay": -1.502,
+   "xgdpg": 0.053
+  },
+  {
+   "team": "Minnesota",
+   "pts": 44,
+   "payroll": 15552855.0,
+   "top3_share": 0.26,
+   "exp_pts": 45.564,
+   "pts_vs_pay": -1.564,
+   "xgdpg": 0.214
+  },
+  {
+   "team": "Los Angeles FC",
+   "pts": 47,
+   "payroll": 32648541.0,
+   "top3_share": 0.548,
+   "exp_pts": 49.055,
+   "pts_vs_pay": -2.055,
+   "xgdpg": 0.372
+  },
+  {
+   "team": "Colorado",
+   "pts": 43,
+   "payroll": 14127613.04,
+   "top3_share": 0.345,
+   "exp_pts": 45.112,
+   "pts_vs_pay": -2.112,
+   "xgdpg": 0.118
+  },
+  {
+   "team": "LA Galaxy",
+   "pts": 44,
+   "payroll": 26431650.0,
+   "top3_share": 0.5,
+   "exp_pts": 48.061,
+   "pts_vs_pay": -4.061,
+   "xgdpg": -0.337
+  },
+  {
+   "team": "New York City",
+   "pts": 42,
+   "payroll": 21539612.0,
+   "top3_share": 0.345,
+   "exp_pts": 47.097,
+   "pts_vs_pay": -5.097,
+   "xgdpg": 0.011
+  },
+  {
+   "team": "New York",
+   "pts": 42,
+   "payroll": 21651691.0,
+   "top3_share": 0.502,
+   "exp_pts": 47.122,
+   "pts_vs_pay": -5.122,
+   "xgdpg": 0.046
+  },
+  {
+   "team": "Toronto",
+   "pts": 39,
+   "payroll": 21391233.0,
+   "top3_share": 0.458,
+   "exp_pts": 47.065,
+   "pts_vs_pay": -8.065,
+   "xgdpg": -0.357
+  },
+  {
+   "team": "San Diego",
+   "pts": 38,
+   "payroll": 24391009.0,
+   "top3_share": 0.605,
+   "exp_pts": 47.683,
+   "pts_vs_pay": -9.683,
+   "xgdpg": -0.142
+  },
+  {
+   "team": "D.C. United",
+   "pts": 33,
+   "payroll": 14546167.0,
+   "top3_share": 0.339,
+   "exp_pts": 45.249,
+   "pts_vs_pay": -12.249,
+   "xgdpg": -0.22
+  },
+  {
+   "team": "Austin",
+   "pts": 34,
+   "payroll": 19893439.0,
+   "top3_share": 0.523,
+   "exp_pts": 46.723,
+   "pts_vs_pay": -12.723,
+   "xgdpg": -0.906
+  },
+  {
+   "team": "Atlanta",
+   "pts": 33,
+   "payroll": 27884034.6,
+   "top3_share": 0.599,
+   "exp_pts": 48.313,
+   "pts_vs_pay": -15.313,
+   "xgdpg": -0.111
+  },
+  {
+   "team": "Kansas City",
+   "pts": 26,
+   "payroll": 12359396.0,
+   "top3_share": 0.56,
+   "exp_pts": 44.483,
+   "pts_vs_pay": -18.483,
+   "xgdpg": -0.754
+  },
+  {
+   "team": "Montr\u00e9al",
+   "pts": 26,
+   "payroll": 13418254.0,
+   "top3_share": 0.313,
+   "exp_pts": 44.869,
+   "pts_vs_pay": -18.869,
+   "xgdpg": -0.369
+  }
+ ],
+ "season_payroll": [
+  {
+   "season": 2013,
+   "median": 3819588.82,
+   "max": 10939331.16,
+   "min": 2577421.12,
+   "top3_share": 0.377
+  },
+  {
+   "season": 2014,
+   "median": 4481881.53,
+   "max": 16712603.18,
+   "min": 3306115.38,
+   "top3_share": 0.445
+  },
+  {
+   "season": 2015,
+   "median": 5864370.005,
+   "max": 22136511.88,
+   "min": 4098291.59,
+   "top3_share": 0.489
+  },
+  {
+   "season": 2016,
+   "median": 6826270.26,
+   "max": 21529800.08,
+   "min": 4303901.66,
+   "top3_share": 0.489
+  },
+  {
+   "season": 2017,
+   "median": 8348945.68,
+   "max": 22552040.04,
+   "min": 5416549.08,
+   "top3_share": 0.458
+  },
+  {
+   "season": 2018,
+   "median": 9689537.94,
+   "max": 26559206.48,
+   "min": 5896563.3,
+   "top3_share": 0.439
+  },
+  {
+   "season": 2019,
+   "median": 10645351.49,
+   "max": 24267066.06,
+   "min": 8152129.68,
+   "top3_share": 0.432
+  },
+  {
+   "season": 2021,
+   "median": 12659495.0,
+   "max": 20322677.0,
+   "min": 9890085.0,
+   "top3_share": 0.407
+  },
+  {
+   "season": 2022,
+   "median": 15761683.0,
+   "max": 32234728.0,
+   "min": 9642386.0,
+   "top3_share": 0.417
+  },
+  {
+   "season": 2023,
+   "median": 14979335.0,
+   "max": 39419072.0,
+   "min": 9642918.0,
+   "top3_share": 0.417
+  },
+  {
+   "season": 2024,
+   "median": 16680315.0,
+   "max": 41708281.0,
+   "min": 11438409.0,
+   "top3_share": 0.436
+  },
+  {
+   "season": 2025,
+   "median": 17927990.0,
+   "max": 48970481.0,
+   "min": 12923253.0,
+   "top3_share": 0.426
+  },
+  {
+   "season": 2026,
+   "median": 20403175.5,
+   "max": 54574540.0,
+   "min": 11696829.0,
+   "top3_share": 0.434
+  }
+ ],
+ "fit": [
+  0.13845871224776918,
+  1.3805426412943005
+ ],
+ "releases": {
+  "2013": "2013-09-15",
+  "2014": "2014-09-15",
+  "2015": "2015-09-15",
+  "2016": "2016-09-15",
+  "2017": "2017-09-15",
+  "2018": "2018-09-15",
+  "2019": "2019-09-13",
+  "2020": "2020-12-01",
+  "2021": "2021-09-30",
+  "2022": "2022-09-02",
+  "2023": "2023-09-15",
+  "2024": "2024-09-13",
+  "2025": "2025-10-01",
+  "2026": "2026-04-16"
+ }
+}

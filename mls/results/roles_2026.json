@@ -1,0 +1,338 @@
+{
+ "Centre-backs|0": {
+  "n": 56,
+  "high": [
+   "Pass verticality",
+   "Pass length",
+   "xG"
+  ],
+  "low": [
+   "Dribble actions",
+   "Passes"
+  ],
+  "members": [
+   "Nathan Harriel",
+   "Morris Duggan",
+   "Shaq Moore",
+   "Justin Haak",
+   "Lucas Bartlett",
+   "Daniel Munie"
+  ],
+  "name": "Direct stopper"
+ },
+ "Centre-backs|1": {
+  "n": 29,
+  "high": [
+   "Key passes",
+   "xA",
+   "Dribble actions"
+  ],
+  "low": [
+   "Pass verticality",
+   "Pass length"
+  ],
+  "members": [
+   "Dante Polvara",
+   "Math\u00edas Laborda",
+   "Steven Moreira",
+   "Mamadou Fofana",
+   "Malte Amundsen",
+   "Dylan Nealis"
+  ],
+  "name": "Wide CB / hybrid"
+ },
+ "Centre-backs|2": {
+  "n": 21,
+  "high": [
+   "Receptions",
+   "Passes",
+   "Dribble actions"
+  ],
+  "low": [
+   "xA",
+   "Key passes"
+  ],
+  "members": [
+   "Sean Zawadzki",
+   "Timo Baumgartl",
+   "Maxwell Woledzi",
+   "Manu Duah",
+   "Tristan Blackmon",
+   "Thiago Martins"
+  ],
+  "name": "Ball-playing CB"
+ },
+ "Fullbacks|0": {
+  "n": 30,
+  "high": [
+   "xG",
+   "Shots",
+   "xA"
+  ],
+  "low": [
+   "Passes",
+   "Pass length"
+  ],
+  "members": [
+   "Iv\u00e1n Angulo",
+   "Lawrence Ennali",
+   "Anthony Markanich",
+   "Jon Gallagher",
+   "Conrad Wallem",
+   "Joseph Rosales"
+  ],
+  "name": "Attacking wing-back"
+ },
+ "Fullbacks|1": {
+  "n": 26,
+  "high": [
+   "Interruptions",
+   "Pass length",
+   "Pass verticality"
+  ],
+  "low": [
+   "Key passes",
+   "xA"
+  ],
+  "members": [
+   "Will Sands",
+   "Silvan Hefti",
+   "Tom\u00e1s Jacob",
+   "Richie Laryea",
+   "Oscar Verhoeven",
+   "Dawid Bugaj"
+  ],
+  "name": "Defensive fullback"
+ },
+ "Fullbacks|2": {
+  "n": 37,
+  "high": [
+   "Passes",
+   "Receptions",
+   "Touch share"
+  ],
+  "low": [
+   "xG",
+   "Shots"
+  ],
+  "members": [
+   "Keisuke Kurokawa",
+   "Nouhou",
+   "El\u00edas Baez",
+   "Tayvon Gray",
+   "Tate Johnson",
+   "Luca Petrasso"
+  ],
+  "name": "Possession fullback"
+ },
+ "Midfield|0": {
+  "n": 11,
+  "high": [
+   "Passes",
+   "Receptions",
+   "Touch share"
+  ],
+  "low": [
+   "Interruptions",
+   "xG"
+  ],
+  "members": [
+   "Carles Gil",
+   "Rodrigo de Paul",
+   "Ashley Westwood",
+   "Ronald Donkor",
+   "Alonso Coello",
+   "Jeppe Tverskov"
+  ],
+  "name": "Deep playmaker hub"
+ },
+ "Midfield|1": {
+  "n": 37,
+  "high": [
+   "Passes",
+   "Receptions",
+   "Interruptions"
+  ],
+  "low": [
+   "xG",
+   "xA"
+  ],
+  "members": [
+   "Noel Caliskan",
+   "Adri Mehmeti",
+   "Anton Sal\u00e9tros",
+   "Matty Longstaff",
+   "Tristan Muyumba",
+   "Mark Delgado"
+  ],
+  "name": "Circulator"
+ },
+ "Midfield|2": {
+  "n": 31,
+  "high": [
+   "xG",
+   "Shots",
+   "xA"
+  ],
+  "low": [
+   "Interruptions",
+   "Pass verticality"
+  ],
+  "members": [
+   "Pep Biel",
+   "Albert Rusn\u00e1k",
+   "Evander",
+   "David Da Costa",
+   "Beau Leroux",
+   "Taha Habroune"
+  ],
+  "name": "Attacking 10"
+ },
+ "Midfield|3": {
+  "n": 47,
+  "high": [
+   "Interruptions",
+   "Pass verticality",
+   "Pass length"
+  ],
+  "low": [
+   "Dribble actions",
+   "Receptions"
+  ],
+  "members": [
+   "Brooklyn Raines",
+   "Danley Jean Jacques",
+   "Pavel Bucha",
+   "Kaick",
+   "Daniel Edelman",
+   "Jovan Luki\u0107"
+  ],
+  "name": "Ball-winner"
+ },
+ "Strikers|0": {
+  "n": 23,
+  "high": [
+   "xG",
+   "Shots",
+   "Interruptions"
+  ],
+  "low": [
+   "Passes",
+   "Pass length"
+  ],
+  "members": [
+   "Rafael Navarro",
+   "Julian Hall",
+   "K\u00e9vin Denkey",
+   "Bruno Damiani",
+   "Brian White",
+   "Kelvin Yeboah"
+  ],
+  "name": "Penalty-box striker"
+ },
+ "Strikers|1": {
+  "n": 12,
+  "high": [
+   "Passes",
+   "Receptions",
+   "Key passes"
+  ],
+  "low": [
+   "xG",
+   "Interruptions"
+  ],
+  "members": [
+   "Nicol\u00e1s Fern\u00e1ndez",
+   "Hany Mukhtar",
+   "Son Heung-Min",
+   "Milan Iloski",
+   "Mart\u00edn Ojeda",
+   "Petar Musa"
+  ],
+  "name": "Creative / false 9"
+ },
+ "Strikers|2": {
+  "n": 17,
+  "high": [
+   "Pass length",
+   "Interruptions",
+   "Passes"
+  ],
+  "low": [
+   "Touch share",
+   "Shots"
+  ],
+  "members": [
+   "Dejan Joveljic",
+   "Dor Turgeman",
+   "Idan Toklomati",
+   "Preston Judd",
+   "Myrto Uzuni",
+   "Tom Barlow"
+  ],
+  "name": "Pressing target forward"
+ },
+ "Wingers|0": {
+  "n": 26,
+  "high": [
+   "Touch share",
+   "Passes",
+   "Receptions"
+  ],
+  "low": [
+   "Interruptions",
+   "xG"
+  ],
+  "members": [
+   "Anders Dreyer",
+   "Kristoffer Velde",
+   "Lionel Messi",
+   "Guilherme",
+   "Aleksey Miranchuk",
+   "Philip Zinckernagel"
+  ],
+  "name": "Creator winger"
+ },
+ "Wingers|1": {
+  "n": 30,
+  "high": [
+   "Interruptions",
+   "xG",
+   "Pass verticality"
+  ],
+  "low": [
+   "Key passes",
+   "xA"
+  ],
+  "members": [
+   "D\u00e1niel Sall\u00f3i",
+   "Calvin Harris",
+   "Indiana Vassilev",
+   "Jackson Hopkins",
+   "Hannes Wolf",
+   "Paul Rothrock"
+  ],
+  "name": "Pressing wide forward"
+ },
+ "Wingers|2": {
+  "n": 34,
+  "high": [
+   "Shots",
+   "xG",
+   "xA"
+  ],
+  "low": [
+   "Passes",
+   "Touch share"
+  ],
+  "members": [
+   "Mateusz Bogusz",
+   "Paxten Aaronson",
+   "D\u00e9nis Bouanga",
+   "Agust\u00edn Ojeda",
+   "Maren Haile-Selassie",
+   "Ousseni Bouda"
+  ],
+  "name": "Inside forward"
+ }
+}

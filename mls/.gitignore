@@ -1,0 +1,27 @@
+# Raw and third-party data: re-fetched by the scripts, never committed (see data/README.md)
+data/raw/
+data/espn/
+data/ext/*
+!data/ext/stadium_elevation.json
+data/tm/
+data/nba/
+data/uploads/
+
+# Private or pending a publication decision
+data/salaries_*.csv
+data/dp_current_*.csv
+data/ext/preseason_futures*.csv
+*.xlsx
+
+# Script outputs (a curated snapshot lives in results/)
+out/
+*.pkl
+*.pkl.gz
+
+# Python and OS
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+.DS_Store

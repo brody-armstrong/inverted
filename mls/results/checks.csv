@@ -1,0 +1,17 @@
+check,result,detail,verdict
+"NUTS convergence, all 14 seasons",max R-hat 1.010; min ESS 416,Criterion R-hat <= 1.01 and ESS >= 400 for every parameter,PASS
+Equal-teams league gives the chance spread,observed/chance variance = 0.950 (±0.008),"5,200 simulated MLS seasons of identical teams; criterion within 5% of 1",PASS
+Model reproduces MLS luck share,model 0.651 vs observed 0.556,Raw Dixon-Coles packs teams closer than real tables; criterion |diff| <= 0.05. Calibrated rerun reported alongside,FAIL
+Simulated Shield winner wins MLS Cup vs history,simulated 21.7%; actual 2 of 12 (16.7%),Binomial test p = 1.00; criterion p > 0.05,PASS
+Luck share benchmark: NBA,ours 13% (2013–26) vs Mauboussin 12% (2007–11),Criterion within 6 points; different seasons and draw/OT handling,PASS
+Luck share benchmark: NFL,ours 41% (2013–26) vs Mauboussin 38% (2007–11),Criterion within 6 points; different seasons and draw/OT handling,PASS
+Luck share benchmark: MLB,ours 28% (2013–26) vs Mauboussin 34% (2007–11),Criterion within 6 points; different seasons and draw/OT handling,FAIL
+Luck share benchmark: NHL,ours 31% (2013–26) vs Mauboussin 53% (2007–11),Criterion within 6 points; different seasons and draw/OT handling,FAIL
+Luck share benchmark: Premier League,ours 20% (2013–26) vs Mauboussin 31% (2007–11),Criterion within 6 points; different seasons and draw/OT handling,FAIL
+"Premier League luck share, Mauboussin's coin-flip method",27% (2013–26),"Win% with draws as half-wins and 0.25/n chance variance (overstates chance in soccer, where draws cut outcome variance)",PARTIAL
+Ghost-game drop in European home advantage,home edge 0.45 → 0.20 pts/game (-56%),McCarrick et al. (2021): 0.39 → 0.22 (about halved); criterion: drop of 30–70%,PASS
+2026 holdout beats base rates,log loss 1.0534 vs 1.0647,"510 matches; difference -0.0113 [-0.0209, -0.0021]",PASS
+2026 holdout within 0.015 of closing odds,log loss 1.0534 vs market 1.0180; Brier 0.6342 vs 0.6087,"Model minus market +0.0355 [+0.0168, +0.0529]",FAIL
+Odds price travel distance and altitude,"market: +0.071 pts/1,000 km (p 0.000); altitude climb +0.17 (p 0.003)",Same sign as the results regression and p < 0.05 in the market,PASS
+Rule changes stand out from placebo leagues,TAM (2016 on) talent_sd: p=1.00; TAM (2016 on) luck_share: p=0.42; U22 Initiative (2022 on) talent_sd: p=0.58; U22 Initiative (2022 on) luck_share: p=0.17,Permutation over 11 European leagues as fake-treated; criterion p < 0.10 for a causal claim,FAIL
+Rule-change years stand out from placebo years,largest MLS shift in talent spread at a split in 2018,Scan of every split year 2016–2024; criterion: largest shift at 2016 or 2022,FAIL

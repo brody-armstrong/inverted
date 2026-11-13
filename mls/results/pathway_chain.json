@@ -1,0 +1,57 @@
+{
+ "chain_test": {
+  "xg_96": {
+   "mae_chain": 0.0607849925593612,
+   "mae_position_mean": 0.07422796087755147
+  },
+  "shots_96": {
+   "mae_chain": 0.27759347607508833,
+   "mae_position_mean": 0.43710185647361116
+  },
+  "xa_96": {
+   "mae_chain": 0.03905095294597905,
+   "mae_position_mean": 0.03887295144373209
+  },
+  "kp_96": {
+   "mae_chain": 0.26473797812642746,
+   "mae_position_mean": 0.28469660476691977
+  },
+  "passes_96": {
+   "mae_chain": 4.914729438542733,
+   "mae_position_mean": 6.232914309809176
+  },
+  "recv_96": {
+   "mae_chain": 3.751259080686499,
+   "mae_position_mean": 4.979023293164414
+  },
+  "drib_96": {
+   "mae_chain": 1.9610891877411605,
+   "mae_position_mean": 1.9764486966365482
+  },
+  "int_96": {
+   "mae_chain": 1.3671466628487645,
+   "mae_position_mean": 1.2501348926758642
+  },
+  "share_team_touches": {
+   "mae_chain": 0.011981517185253773,
+   "mae_position_mean": 0.016944723366211747
+  },
+  "passes_completed_over_expected_p100": {
+   "mae_chain": 1.6961123002038563,
+   "mae_position_mean": 1.9577976506218866
+  },
+  "gplus_96": {
+   "mae_chain": 0.06363817466004887,
+   "mae_position_mean": 0.06460383273572652
+  }
+ },
+ "n_direct": 14,
+ "usl1_uslc_pairs": 68,
+ "usl1_uslc_factors": {
+  "xg_96": 0.8294149254323435,
+  "xa_96": 0.9410388237532212,
+  "passes_96": 0.9138826096790017,
+  "int_96": 0.9347039254609562,
+  "drib_96": 0.902364946855583
+ }
+}
