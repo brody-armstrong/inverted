@@ -70,13 +70,12 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
 <div class="wrap">
   <header>
     <h1>MLS Roster Investment Simulator</h1>
-    <p class="sub"><strong>v1.0 · post-2026 roster snapshot.</strong> A roster evaluation tool, not a 2027 forecast: offseason moves (option decisions, departures, trades, signings) are entered as scenarios until rosters settle. Remove players, add players or signings, and set extra budget to see what moves the needle. Every change shows an 80% range.</p>
+    <p class="sub"><strong>v1.1 · rosters from the MLSPA salary release of __ROSTER_DATE__.</strong> A roster evaluation tool, not a 2027 forecast: offseason moves (option decisions, departures, trades, signings) are entered as scenarios until rosters settle. Remove players, add players or signings, and set extra budget to see what moves the needle. Every change shows an 80% range.</p>
   </header>
 
   <form class="bar" id="controls" onsubmit="event.preventDefault()">
     <div class="field"><label for="club">Club</label><select id="club"></select></div>
     <div class="field"><label for="budget">Extra budget ($M per year)</label><input id="budget" type="number" min="0" max="20" step="0.25" value="2.5"></div>
-    <div class="field"><label for="dropce">&nbsp;</label><button type="button" class="ghost" id="dropce">Remove contracts ending 2026</button></div>
     <div class="field"><label for="reset">&nbsp;</label><button type="button" class="ghost" id="reset">Reset roster</button></div>
     <div class="status" id="status"></div>
   </form>
@@ -129,7 +128,7 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
   <footer>
     <div><strong>How it's built.</strong> Player impact comes from __MATCHES__ MLS matches (__SEASONS__): how closing betting lines moved with who was on the field, projected forward with age, salary and recent form. Team strength adds up each player's impact by expected minutes; seasons are simulated match by match.</div>
     <div><strong>How well it works.</strong> Backtested 2016–2026 from preseason rosters: average rank correlation with final points __BT_MODEL__ (last season's points: __BT_NAIVE__). Against preseason MLS Cup futures it reproduces the market's ranking (2025: __F25__, 2026: __F26__) with similar accuracy against final points. Typical error is about __RMSE__ points per club, half of it match luck.</div>
-    <div><strong>Limits.</strong> Values every minute alike; outside-cause absences suggest elite players matter somewhat more than this, so star upgrades may be undervalued. Budget means guaranteed compensation: salary cap, DP, TAM and GAM mechanics are not modelled. Rosters come from a third-party salary list updated March–September 2026 by club (San Diego: April 2026 MLSPA release); later moves are missing, and many contracts listed as ending in 2026 carry club options. Signings are valued from past arrivals at a similar salary and age; transfer fees and previous leagues are not used yet.</div>
+    <div><strong>Limits.</strong> Values every minute alike; outside-cause absences suggest elite players matter somewhat more than this, so star upgrades may be undervalued. Budget means guaranteed compensation: salary cap, DP, TAM and GAM mechanics are not modelled. Rosters come from the MLS Players Association salary release of __ROSTER_DATE__ (players under contract on that date); signings, departures and option decisions since then are missing and can be entered as scenarios. Signings are valued from past arrivals at a similar salary and age; transfer fees and previous leagues are not used yet.</div>
   </footer>
 </div>
 <script>
@@ -246,7 +245,7 @@ function render() {
   // roster
   const R = rosters[sel]; teamQ(R);
   const rows = R.map((p, j) => [p, j]).sort((a, b) => (a[0].out - b[0].out) || (b[0].r - a[0].r));
-  $("roster").querySelector("tbody").innerHTML = rows.map(([p, j]) => `<tr class="${p.out ? "out" : ""} ${p.added ? "added" : ""}"><td>${p.n}${p.ce === 2026 ? ' <span class="pill" title="Contract listed as ending in 2026">ends 2026</span>' : ""}</td><td><span class="pill">${p.pos}</span></td><td class="n">${p.age ?? "–"}</td><td class="n">${fmt$(p.sal)}</td><td class="n">${imp(p.r)}</td><td class="n">${p.out ? "–" : Math.round(p.share * 100) + "%"}</td><td><button type="button" class="ghost mini" data-j="${j}">${p.out ? "Restore" : "Remove"}</button></td></tr>`).join("");
+  $("roster").querySelector("tbody").innerHTML = rows.map(([p, j]) => `<tr class="${p.out ? "out" : ""} ${p.added ? "added" : ""}"><td>${p.n}</td><td><span class="pill">${p.pos}</span></td><td class="n">${p.age ?? "–"}</td><td class="n">${fmt$(p.sal)}</td><td class="n">${imp(p.r)}</td><td class="n">${p.out ? "–" : Math.round(p.share * 100) + "%"}</td><td><button type="button" class="ghost mini" data-j="${j}">${p.out ? "Restore" : "Remove"}</button></td></tr>`).join("");
   $("roster").querySelectorAll("button[data-j]").forEach(b => b.onclick = () => { const p = R[+b.dataset.j]; if (p.added) R.splice(+b.dataset.j, 1); else p.out = !p.out; render(); });
   weakness(R, Qs); money(Qs, me);
   $("status").textContent = `Simulated ${N_SIM.toLocaleString()} seasons in ${Math.round(performance.now() - t0)} ms`;
@@ -289,7 +288,6 @@ function money(Qs, me) {
 T.forEach((t, i) => { const o = document.createElement("option"); o.value = i; o.textContent = t.name; $("club").appendChild(o); });
 $("club").value = sel; $("club").onchange = e => { sel = +e.target.value; render(); };
 $("budget").oninput = () => { clearTimeout(window._bt); window._bt = setTimeout(render, 250); };
-$("dropce").onclick = () => { rosters[sel].forEach(p => { if (p.ce === 2026 && !p.added) p.out = true; }); render(); };
 $("reset").onclick = () => { rosters[sel] = T[sel].players.map(p => Object.assign({}, p)); render(); };
 const pool = []; T.forEach((t, i) => t.players.forEach(p => pool.push({ label: `${p.n} (${t.name})`, p, i })));
 $("pool").innerHTML = pool.map(x => `<option value="${x.label.replace(/"/g, "&quot;")}"></option>`).join("");

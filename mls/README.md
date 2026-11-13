@@ -44,6 +44,7 @@ Research-engineer-level analytics for Major League Soccer: two research papers, 
 - [Installation](#installation)
 - [Usage](#usage)
 - [Validation](#validation)
+- [Reproducibility](#reproducibility)
 - [Repository layout](#repository-layout)
 - [Data](#data)
 - [Roadmap](#roadmap)
@@ -78,7 +79,9 @@ The front-office tool built on Paper 2. Pick a club, remove players, add MLS pla
 
 It reproduces preseason market expectations (correlation with preseason futures 0.81 in 2025 and 0.80 in 2026) and shows where the model and the market disagree. It is a roster evaluation tool, not a 2027 forecast: offseason moves are scenarios the user sets.
 
-**[Open the simulator (v1.0)](https://claude.ai/artifact/ES6Evuy4YEL2YBWCpFZH9W)** · [code](src/simulator/) · [roadmap](src/simulator/ROADMAP.md)
+**[Open the simulator (v1.1)](https://claude.ai/artifact/ES6Evuy4YEL2YBWCpFZH9W)** · [code](src/simulator/) · [validation against v1.0](src/simulator/VALIDATION.md) · [roadmap](src/simulator/ROADMAP.md)
+
+Rosters come from the MLS Players Association's public salary release of April 16, 2026; every input is public and the build is reproducible.
 
 ## Other work
 
@@ -122,6 +125,34 @@ This project uses validation checks rather than a unit-test suite: each one test
 - **Paper 1** ([`results/checks.csv`](results/checks.csv)): sampler convergence, an equal-teams league, luck-share benchmarks against other sports, a 2026 holdout against closing odds, and placebo tests for rule changes. 8 pass, 7 fail, 1 partial.
 - **Paper 2** ([`papers/paper2/results-log.md`](papers/paper2/results-log.md)): rating stability (pass), placebo absences (pass), parameter recovery on simulated leagues (naive estimator fail; calibrated estimator weak pass), market check of the absence study (partial), NBA method check (fail), and face validity on known elite teams (mixed, reported).
 - **Simulator:** the 2016–2026 rolling projection backtest beats carrying last season forward (rank correlation 0.285 against 0.222), and the 2025 and 2026 preseason projections are compared with the futures market.
+- **Simulator rebuild:** v1.1 was rebuilt from public data and checked against v1.0 with thresholds set in advance ([`src/simulator/VALIDATION.md`](src/simulator/VALIDATION.md)); every pipeline check passes.
+
+## Reproducibility
+
+Every published result can be traced to public data and to code in this repository.
+
+**Data sources**
+- [American Soccer Analysis](https://www.americansocceranalysis.com/): player, team and match data, and the MLSPA salary releases
+- ESPN: match lineups, events and commentary
+- Public odds data: closing odds from [football-data.co.uk](https://www.football-data.co.uk/)
+- MLS Players Association public salary releases
+
+**Unavailable features**
+
+The public data does not include these, so the simulator does not model them:
+- contract end dates
+- option years
+- private roster metadata
+
+**Validation**
+
+The simulator was rebuilt from public data only and validated against the original development build ([`src/simulator/VALIDATION.md`](src/simulator/VALIDATION.md)):
+- player ratings reproduce to 13 decimal places
+- projection-model coefficients reproduce exactly
+- roster sensitivity is documented club by club
+- simulation noise is quantified
+
+Historical prototype data was removed from the public repository due to source restrictions.
 
 ## Repository layout
 

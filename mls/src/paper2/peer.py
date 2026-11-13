@@ -7,8 +7,10 @@ Then (same definitions as the MLS xG analysis):
   P5 shares: Cov(contribution of rank group, Q) / Var(Q), Q = minutes-weighted sum of ratings x 11.
   Absence: outside-cause absences of regulars (call-ups within 3 days, red-card suspensions); per-absence cost and
   per-rating-point cost by rank group, team-season and opponent-season fixed effects, bootstrap by team-season.
-Usage: python src/paper2/peer.py <espn_league> <football-data code or MLS>
+Usage: python src/paper2/peer.py <espn_league> <football-data code or MLS> [--ratings-only]
 Writes out/peer_<league>.json and out/peer_ratings_<league>.pkl.
+--ratings-only stops after section D (no absence study) and writes out/peer_<league>_ratings_only.json; the simulator
+needs only these ratings, and section E needs out/national_team_squads.pkl.
 """
 import sys, gzip, json, glob, re, unicodedata
 import numpy as np, pandas as pd
@@ -130,6 +132,15 @@ Q = PM.groupby(["season", "team"]).c.sum()
 C = PM.pivot_table(index=["season", "team"], columns="grp", values="c", aggfunc="sum").fillna(0)
 shares = {g: float(np.cov(C[g], Q.loc[C.index])[0, 1] / Q.loc[C.index].var()) for g in ("1-3", "4-11", "rest") if g in C}
 q_sd = float(Q.groupby(level=0).std().mean())
+
+# ---------- ratings only (the simulator needs sections A-D; section E needs out/national_team_squads.pkl) ----------
+if "--ratings-only" in sys.argv:
+    R.to_pickle(f"out/peer_ratings_{LG}.pkl"); PM.to_pickle(f"out/peer_pm_{LG}.pkl")
+    res = {"league": LG, "matches": int(len(MT)), "lambda": best[0], "cv_r2": float(1 - best[1] / base_err),
+           "team_seasons": int(len(Q)), "team_quality_sd_within_season": q_sd, "P5_shares": shares}
+    json.dump(res, open(f"out/peer_{LG}_ratings_only.json", "w"), indent=1)
+    print(json.dumps(res, default=float))
+    sys.exit(0)
 
 # ---------- E. absences ----------
 NT = pd.read_pickle("out/national_team_squads.pkl")

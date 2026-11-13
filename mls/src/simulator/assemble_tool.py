@@ -16,10 +16,11 @@ fill = {
     "__F25__": f"{m['futures']['2025']['model_vs_market']:.2f}",
     "__F26__": f"{m['futures']['2026']['model_vs_market']:.2g}",
     "__RMSE__": f"{round(m['rmse_pts'])}",
+    "__ROSTER_DATE__": m["roster_date"],
 }
 t = open("src/simulator/tool_template.html").read()
 for k, v in fill.items():
-    assert t.count(k) == 1, k
+    assert t.count(k) >= 1, k
     t = t.replace(k, v)
 open("out/tool/index.html", "w").write(t)
 print("wrote out/tool/index.html")

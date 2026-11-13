@@ -23,12 +23,13 @@ Code for the frozen v1.0 article. Predictions and verdicts: [`papers/paper2/`](.
 
 ## Known reproducibility gaps
 
+`out/market_gd_mls.pkl` is no longer a gap: `src/paper2/market_gd_mls.py` (added 2026-11-13) recreates it from the documented method and reproduces the v1.0 market ratings exactly (see `src/simulator/VALIDATION.md`). `peer.py --ratings-only` runs without the national-team squads.
+
 The following inputs or results were produced in the original working sessions by code that is not in this repository yet. The numbers in `results/` and in the article are the ones those runs produced; the steps below cannot regenerate them until the code is added.
 
 | File | Used by / reported in | What it is |
 |---|---|---|
 | `out/national_team_squads.pkl` | `absence.py`, `peer.py` | national-team match-day squads from ESPN (≈10,500 international matches), used to identify call-up absences |
-| `out/market_gd_mls.pkl` | `absence.py`, `peer.py`, `project.py` | closing-market expected goal difference per MLS match (Pinnacle 1X2, margin removed, inverted through a Poisson model) |
 | `results/futures_backtest.json` | `src/simulator/tool_data.py`; article (futures check) | model vs preseason MLS Cup futures, 2025 and 2026 |
 | `results/p8_tiers.json` | article (P8, tier Shapley) | stretching each MLS roster tier to the peer-median spread |
 | `results/persistence.json` | article (P7, persistence accounting) | who leaves after a rise in rating; year-to-year team quality; returning minutes |
