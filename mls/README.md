@@ -10,8 +10,8 @@ The findings are descriptive. They evaluate how MLS's roster design shapes the l
 
 | | Question | Status |
 |---|---|---|
-| **Paper 1** | [Is MLS Built to Be Random?](https://claude.ai/artifact/4ZB9UUSKRT5SiMvQjafJb3) | Complete |
-| **Paper 2** | [Why MLS Teams Stay So Close Together](https://claude.ai/artifact/YD67sqzPxspeE2gWBid1sd) · [executive summary](https://claude.ai/artifact/LFfY6yRu5SnJztbhpKCHXU) | Complete, frozen v1.0 (2026-11-12) |
+| **Paper 1** | [Is MLS Built to Be Random?](papers/paper1/is-mls-built-to-be-random.pdf) | Complete |
+| **Paper 2** | [Why MLS Teams Stay So Close Together](papers/paper2/why-mls-teams-stay-so-close-together.pdf) · [executive summary](https://claude.ai/artifact/LFfY6yRu5SnJztbhpKCHXU) | Complete, frozen v1.0 (2026-11-12) |
 | **Paper 3** | Which roster rules cause the compression: natural experiments on allocation money, Designated Player rule changes, the U22 Initiative and expansion | Not started; will be preregistered |
 
 ## Results in brief
