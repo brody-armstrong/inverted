@@ -2,7 +2,7 @@
 
 ![Python 3.13](https://img.shields.io/badge/python-3.13-blue) ![Code: MIT](https://img.shields.io/badge/code-MIT-green) ![Text: CC BY 4.0](https://img.shields.io/badge/text-CC%20BY%204.0-lightgrey) ![Paper 2: frozen v1.0](https://img.shields.io/badge/Paper%202-frozen%20v1.0-orange)
 
-Research-engineer-level analytics for Major League Soccer: two research papers, a front-office Roster Investment Simulator, and the data pipelines behind them.
+A reproducible MLS analytics project consisting of two research papers, a roster simulator, and the underlying data pipelines.
 
 **Author:** Brody Armstrong
 
