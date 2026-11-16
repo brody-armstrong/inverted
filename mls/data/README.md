@@ -31,4 +31,4 @@ None yet. A small sample (one MLS season of stints and ratings, for example) can
 
 All salary figures come from the MLS Players Association's public salary releases, via the American Soccer Analysis API.
 
-Historical prototype data removed from public repository due to source restrictions. An early development build of the simulator (v1.0) used a club-updated salary list compiled from commercial salary websites whose terms do not allow redistribution or machine-learning use. That list was never committed, is not used by any current output, and has been removed from the working project. `src/dp/dp_build.py` still reads it for 2026 Designated Player salaries and needs the same change (see `src/dp/README.md`).
+Historical prototype data removed from public repository due to source restrictions. An early development build of the simulator (v1.0) used a club-updated salary list compiled from commercial salary websites whose terms do not allow redistribution or machine-learning use. That list was never committed, is not used by any current output, and has been removed from the working project. `src/dp/dp_build.py` now uses the MLSPA releases only.

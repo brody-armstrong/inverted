@@ -1,6 +1,6 @@
 """What MLS clubs get from Designated Players, 2013-2026.
 
-Inputs: out/dp_draft_2013_2026.csv (DP list with J's confirmations), ASA salaries, minutes, goals added (g+),
+Inputs: out/dp_draft_2013_2026.csv (DP list with manual confirmations), ASA salaries, minutes, goals added (g+),
 match results. Outputs out/dp_analysis.json and printed tables.
 """
 import json, pathlib

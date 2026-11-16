@@ -71,32 +71,10 @@ SAL["which"] = SAL.apply(lambda r: "spring" if r.release == rel.loc[r.season, "m
 SAL["name"] = SAL.player_id.map(lambda i: players.get(i, {}).get("player_name"))
 SAL["src"] = "MLSPA (via ASA)"
 
-# 2026 later-season salaries: uploaded third-party list, one snapshot per club (Mar-Sep 2026)
-U = pd.read_csv("data/salaries_2026-08.csv")
-xg26 = {}
-for x in load("mls_xgoals_2026"):
-    for t in (x["team_id"] if isinstance(x["team_id"], list) else [x["team_id"]]):
-        xg26.setdefault(t, set()).add(x["player_id"])
-upl = []
-for r in U.itertuples():
-    tid, _ = team_id_for(r.club)
-    pool = xg26.get(tid, set()) | set(SAL[(SAL.season == LAST) & (SAL.team_id == tid)].player_id)
-    best = max(pool, key=lambda p: sim(r.player, players.get(p, {}).get("player_name", "")), default=None)
-    sc = sim(r.player, players[best]["player_name"]) if best else 0
-    if sc < 0.8:
-        best = max(players, key=lambda p: sim(r.player, players[p]["player_name"]))
-        sc = sim(r.player, players[best]["player_name"])
-        if sc < 0.9:
-            continue
-    upl.append({"season": LAST, "player_id": best, "team_id": tid, "release": pd.Timestamp(r.updated).strftime("%Y-%m-%d"),
-                "comp": r.annual, "base": None, "which": "fall", "name": players[best]["player_name"],
-                "src": f"Uploaded salary list ({r.updated})"})
-UPL = pd.DataFrame(upl)
-UPL = UPL[UPL.release > "2026-04-16"]
-print("uploaded 2026 salaries matched:", len(UPL), "of", len(U))
-SAL = pd.concat([SAL, UPL], ignore_index=True)
+# 2026 salaries: public MLSPA releases only (via ASA). Players signed after the latest release have no 2026 salary
+# row until the next MLSPA release and are flagged as late arrivals below.
 FALL_TEAMS = set(zip(SAL[SAL.which == "fall"].season, SAL[SAL.which == "fall"].team_id))
-LIST_DATE = UPL.groupby("team_id").release.first().to_dict()
+LIST_DATE = {}
 
 mins = {}
 for s in range(FIRST, LAST + 1):
@@ -252,7 +230,7 @@ print("late arrivals not on DP list:", len(LATE), "| 500+ min:", (LATE.mls_minut
 OUT = pd.concat([D, miss[D.columns], LATE[D.columns]], ignore_index=True).sort_values(["season", "club", "player"])
 OUT["verified"] = ""
 OUT["notes"] = ""
-# confirmed answers from J override the sources; "verified" = Y confirmed DP, N confirmed not a DP
+# manually confirmed answers (data/dp_overrides.csv) override the sources; "verified" = Y confirmed DP, N confirmed not a DP
 OUT["is_dp_final"] = OUT.source.str.startswith("Wikipedia").map({True: "Y", False: ""})
 OV = pd.read_csv("data/dp_overrides.csv")
 for o in OV.itertuples():

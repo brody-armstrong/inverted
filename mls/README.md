@@ -56,7 +56,7 @@ Research-engineer-level analytics for Major League Soccer: two research papers, 
 | | Question | Status |
 |---|---|---|
 | **Paper 1** | [Is MLS Built to Be Random?](papers/paper1/is-mls-built-to-be-random.pdf) (PDF) | Complete |
-| **Paper 2** | [Why MLS Teams Stay So Close Together](papers/paper2/why-mls-teams-stay-so-close-together.pdf) (PDF) · [executive summary](https://claude.ai/artifact/LFfY6yRu5SnJztbhpKCHXU) | Complete, frozen v1.0 (2026-11-12) |
+| **Paper 2** | [Why MLS Teams Stay So Close Together](papers/paper2/why-mls-teams-stay-so-close-together.pdf) (PDF) · [executive summary](papers/paper2/executive-summary.pdf) (PDF) | Complete, frozen v1.0 (2026-11-12) |
 | **Paper 3** | Which roster rules cause the compression | Not started; will be preregistered |
 
 ## Results in brief
@@ -85,10 +85,9 @@ Rosters come from the MLS Players Association's public salary release of April 1
 
 ## Other work
 
-- [Player profiles](src/profiles/): data-driven roles, comparable players and value for every MLS player ([explorer](https://claude.ai/artifact/2JhkoRfPcLL8d78G2Buej6)); team analysis, spending and parity.
+- [Player profiles](src/profiles/): data-driven roles, comparable players and value for every MLS player; team analysis, spending and parity.
 - [USL → MLS pathway](src/pathway/): how production in the USL Championship, USL League One and MLS NEXT Pro translates to MLS.
-- [Designated Players, 2013–2026](src/dp/): what clubs get from their DPs ([article](https://claude.ai/artifact/NZZtsuHn4o933qZYLpwYP1)).
-- [San Diego FC: 2026 Squad Review and Recruitment Targets](https://claude.ai/artifact/UtDDJaWrXP8HURR8sH4M1x): a club report built from the same tools.
+- [Designated Players, 2013–2026](src/dp/): what clubs get from their DPs.
 
 ## Installation
 

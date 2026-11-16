@@ -2,7 +2,7 @@
 
 Results in the order they were produced. Predictions and the rules for judging them are in `preregistration.md` (Addenda 1–2 were written before the results they govern).
 
-**Wording rule (from J, 2026-11-12):** write "the weak-link mechanism was not supported", never "the weak-link hypothesis failed": only specific operationalizations were tested. The absence study shows that *relative marginal impact is concentrated toward elite players*; it does not show that lower-ranked players never matter.
+**Wording rule (author, 2026-11-12):** write "the weak-link mechanism was not supported", never "the weak-link hypothesis failed": only specific operationalizations were tested. The absence study shows that *relative marginal impact is concentrated toward elite players*; it does not show that lower-ranked players never matter.
 
 ## Scorecard (2026-11-12)
 
@@ -92,4 +92,4 @@ Gates: stability PASS; placebo PASS; parameter recovery FAIL (naive) / weak pass
 - **The weak-link mechanism was not supported** in the operationalizations tested.
 - **What the evidence suggests instead:** MLS team quality is compressed at every roster tier (most at the top); talent does not cluster at the same clubs the way it does in peer leagues; money buys rating with sharply diminishing returns and does not reliably buy a team's best player; and clubs that lose quality do not reload to the same level the next year, even though MLS rosters turn over less. All of these are descriptive; causal attribution to specific roster rules is Paper 3.
 - Executive summary and full article draft written (2026-11-12). Headline wording: "MLS clubs are much closer together in quality than comparable leagues, with the largest compression at the top of the roster" (does not attribute the mechanism). One-sentence contribution: "MLS parity is better explained by league-wide compression of roster quality, weaker clustering of talent and rapid erosion of competitive advantages than by a depth-first (weak-link) mechanism."
-- Structure frozen per J (2026-11-12): no more structural edits. Remaining: simulator roster refresh after the 2026–27 offseason; publication-quality figures and tables; hostile-reviewer pass for overreaching claims.
+- Structure frozen (2026-11-12): no more structural edits. Remaining: simulator roster refresh after the 2026–27 offseason; publication-quality figures and tables; hostile-reviewer pass for overreaching claims.

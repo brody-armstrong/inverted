@@ -1,6 +1,6 @@
 # Simulator rebuild — validation protocol (written 2026-11-13, before any rebuilt number was seen)
 
-Reference: Simulator v1.0 (live development build, `out/tool/data.json` from the 2026-11-12 handoff bundle) and the committed v1.0 results (`results/peer_usa.1.json`, `results/proj_model.json`, `results/proj_backtest.json`).
+Reference: Simulator v1.0 (the development build live from 2026-11-12, `out/tool/data.json`) and the committed v1.0 results (`results/peer_usa.1.json`, `results/proj_model.json`, `results/proj_backtest.json`).
 
 The rebuild differs from v1.0 in two separable ways, and they are measured separately:
 

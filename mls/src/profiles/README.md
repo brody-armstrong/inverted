@@ -22,4 +22,4 @@ Run from the `mls/` folder.
 - **Value:** season g+ above what a Huber regression of g+/96 on log10(guaranteed compensation) predicts within the group.
 - **Comparables:** cosine similarity on standardized style and quality metrics within group.
 
-Live explorer: [Inverted MLS Player Profiles](https://claude.ai/artifact/2JhkoRfPcLL8d78G2Buej6). The built page is not committed because it embeds player-level ASA values and salaries.
+The built explorer page is not committed: it embeds player-level ASA values. Build it locally with the steps above.
