@@ -1,6 +1,6 @@
 # Inverted
 
-Research-engineer-level football analytics for clubs with smaller analytics departments.
+An open football (soccer) analytics project combining reproducible research, player valuation, and roster simulation for clubs with smaller analytics departments.
 
 The top clubs in Europe have research engineers who build their own player ratings, test ideas against data before acting on them, and tell decision makers how sure they can be. Inverted brings that way of working to clubs that do not have those departments, starting with Major League Soccer. Every project works the same way: questions are stated in advance, predictions are preregistered, methods are checked against outside evidence, and results that go against the hypothesis are reported as they are.
 
