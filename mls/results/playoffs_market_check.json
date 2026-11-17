@@ -1,0 +1,25 @@
+{
+ "source": "Polymarket, as listed on MLSsoccer.com (MLS Cup 2026 odds article), retrieved 2026-11-16",
+ "pct": {
+  "NSH": 24,
+  "MIA": 18,
+  "VAN": 16,
+  "PHI": 7,
+  "STL": 6,
+  "FCD": 5,
+  "LAFC": 5,
+  "CHI": 4,
+  "NER": 4,
+  "HOU": 3,
+  "SJE": 3,
+  "CLT": 2,
+  "CLB": 1,
+  "POR": 1,
+  "CIN": 1,
+  "ORL": 1,
+  "SEA": 1,
+  "RSL": 0.5
+ },
+ "spearman_model": 0.92,
+ "spearman_results_dc": 0.89
+}
