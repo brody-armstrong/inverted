@@ -79,7 +79,7 @@ The front-office tool built on Paper 2. Pick a club, remove players, add MLS pla
 
 It reproduces preseason market expectations (correlation with preseason futures 0.81 in 2025 and 0.80 in 2026) and shows where the model and the market disagree. It is a roster evaluation tool, not a 2027 forecast: offseason moves are scenarios the user sets.
 
-**[Open the simulator (v1.1)](https://claude.ai/artifact/ES6Evuy4YEL2YBWCpFZH9W)** · [code](src/simulator/) · [validation against v1.0](src/simulator/VALIDATION.md) · [roadmap](src/simulator/ROADMAP.md)
+**[Open the simulator (v1.1)](https://brody-armstrong.github.io/inverted/simulator/)** · [code](src/simulator/) · [validation against v1.0](src/simulator/VALIDATION.md) · [roadmap](src/simulator/ROADMAP.md)
 
 Rosters come from the MLS Players Association's public salary release of April 16, 2026; every input is public and the build is reproducible.
 
