@@ -50,39 +50,40 @@ def p_tie(R, t, idx):
     return p if t["winner"] == t["host"] else 1 - p
 
 
-variants = {"market_all": None, "market_hl120": 120, "market_hl90": 90, "market_hl60": 60}
-res = {v: {"match_ll": [], "tie_ll": [], "tie_fav": []} for v in list(variants) + ["results_dc"]}
-base = {"match_ll_market": [], "match_ll_base": []}
-for s in (2023, 2024, 2025):
-    S = M[M.season == s]; R = S[~S.knockout]; K = S[S.knockout]
-    teams = sorted(set(R.home) | set(R.away)); idx = {t: i for i, t in enumerate(teams)}
-    end = R.kickoff_utc.max()
-    br = R.assign(res=np.sign(R.hg - R.ag))
-    bH, bD, bA = (br.res == 1).mean(), (br.res == 0).mean(), (br.res == -1).mean()
-    for _, r in K.iterrows():
-        o = 0 if r.hg > r.ag else (1 if r.hg == r.ag else 2)
-        base["match_ll_market"].append(-np.log([r.mkt_H, r.mkt_D, r.mkt_A][o]))
-        base["match_ll_base"].append(-np.log([bH, bD, bA][o]))
-    T = ties(K)
-    fits = {v: [fit_market(R, teams, hl, end)] for v, hl in variants.items()}
-    fits["results_dc"] = dc_draws(R, teams)
-    for v, draws in fits.items():
+if __name__ == "__main__":
+    variants = {"market_all": None, "market_hl120": 120, "market_hl90": 90, "market_hl60": 60}
+    res = {v: {"match_ll": [], "tie_ll": [], "tie_fav": []} for v in list(variants) + ["results_dc"]}
+    base = {"match_ll_market": [], "match_ll_base": []}
+    for s in (2023, 2024, 2025):
+        S = M[M.season == s]; R = S[~S.knockout]; K = S[S.knockout]
+        teams = sorted(set(R.home) | set(R.away)); idx = {t: i for i, t in enumerate(teams)}
+        end = R.kickoff_utc.max()
+        br = R.assign(res=np.sign(R.hg - R.ag))
+        bH, bD, bA = (br.res == 1).mean(), (br.res == 0).mean(), (br.res == -1).mean()
         for _, r in K.iterrows():
             o = 0 if r.hg > r.ag else (1 if r.hg == r.ag else 2)
-            p = np.mean([probs90(d, idx[r.home], idx[r.away]) for d in draws], axis=0)
-            res[v]["match_ll"].append(-np.log(p[o]))
-        for t in T:
-            p = float(np.mean([p_tie(d, t, idx) for d in draws]))
-            res[v]["tie_ll"].append(-np.log(p)); res[v]["tie_fav"].append(p > 0.5)
-    print(s, "playoff matches", len(K), "ties", len(T), {f: sum(t["fmt"] == f for t in T) for f in ("wildcard", "bo3", "single")})
+            base["match_ll_market"].append(-np.log([r.mkt_H, r.mkt_D, r.mkt_A][o]))
+            base["match_ll_base"].append(-np.log([bH, bD, bA][o]))
+        T = ties(K)
+        fits = {v: [fit_market(R, teams, hl, end)] for v, hl in variants.items()}
+        fits["results_dc"] = dc_draws(R, teams)
+        for v, draws in fits.items():
+            for _, r in K.iterrows():
+                o = 0 if r.hg > r.ag else (1 if r.hg == r.ag else 2)
+                p = np.mean([probs90(d, idx[r.home], idx[r.away]) for d in draws], axis=0)
+                res[v]["match_ll"].append(-np.log(p[o]))
+            for t in T:
+                p = float(np.mean([p_tie(d, t, idx) for d in draws]))
+                res[v]["tie_ll"].append(-np.log(p)); res[v]["tie_fav"].append(p > 0.5)
+        print(s, "playoff matches", len(K), "ties", len(T), {f: sum(t["fmt"] == f for t in T) for f in ("wildcard", "bo3", "single")})
 
-summary = {"seasons": [2023, 2024, 2025], "matches": len(base["match_ll_market"]), "ties": len(res["market_all"]["tie_ll"]),
-           "match_logloss": {"closing_odds": float(np.mean(base["match_ll_market"])), "base_rates": float(np.mean(base["match_ll_base"]))},
-           "tie_logloss_coinflip": float(np.log(2))}
-for v, d in res.items():
-    summary["match_logloss"][v] = float(np.mean(d["match_ll"]))
-    summary.setdefault("tie_logloss", {})[v] = float(np.mean(d["tie_ll"]))
-    summary.setdefault("tie_favourite_advanced", {})[v] = float(np.mean(d["tie_fav"]))
-print(json.dumps(summary, indent=1))
-json.dump(summary, open(OUT / "backtest.json", "w"), indent=1)
-json.dump(summary, open("results/playoffs_backtest.json", "w"), indent=1)
+    summary = {"seasons": [2023, 2024, 2025], "matches": len(base["match_ll_market"]), "ties": len(res["market_all"]["tie_ll"]),
+               "match_logloss": {"closing_odds": float(np.mean(base["match_ll_market"])), "base_rates": float(np.mean(base["match_ll_base"]))},
+               "tie_logloss_coinflip": float(np.log(2))}
+    for v, d in res.items():
+        summary["match_logloss"][v] = float(np.mean(d["match_ll"]))
+        summary.setdefault("tie_logloss", {})[v] = float(np.mean(d["tie_ll"]))
+        summary.setdefault("tie_favourite_advanced", {})[v] = float(np.mean(d["tie_fav"]))
+    print(json.dumps(summary, indent=1))
+    json.dump(summary, open(OUT / "backtest.json", "w"), indent=1)
+    json.dump(summary, open("results/playoffs_backtest.json", "w"), indent=1)

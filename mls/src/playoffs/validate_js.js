@@ -1,8 +1,10 @@
 // Check the browser engine against the exact Python probabilities: 400,000 random brackets.
-// Usage (from mls/): node src/playoffs/validate_js.js
+// Usage (from mls/): node src/playoffs/validate_js.js [market|profile]
 const fs = require("fs");
 const { playBracket } = require("./engine.js");
+const LENS = process.argv[2] || "market";
 const DATA = JSON.parse(fs.readFileSync("out/playoffs/bracket.json"));
+if (LENS === "profile") { const P = JSON.parse(fs.readFileSync("out/playoffs/profile_bracket.json")); DATA.draws = P.draws; DATA.probs = P.probs; }
 let s = 20261119; const rng = () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s);
   t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
 const N = 400000, cnt = {}, finals = {};
@@ -28,4 +30,4 @@ const champTop = Object.entries(cnt).map(([t, c]) => c.champ / N).sort((a, b) =>
 const res = { sims: N, max_abs_diff: +worst.toFixed(4), pass: worst < 0.005, likeliest_finals: top, top_seed_final:
   +((finals[`${DATA.seeds.East[0]}-${DATA.seeds.West[0]}`] || 0) / N).toFixed(4), favourite_champion_prob: +champTop.toFixed(4) };
 console.log(JSON.stringify(res, null, 1));
-fs.writeFileSync("out/playoffs/validate_js.json", JSON.stringify(res, null, 1));
+fs.writeFileSync(LENS === "profile" ? "out/playoffs/validate_js_profile.json" : "out/playoffs/validate_js.json", JSON.stringify(res, null, 1));

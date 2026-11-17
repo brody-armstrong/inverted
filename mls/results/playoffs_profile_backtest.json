@@ -1,0 +1,8 @@
+{
+ "matches": 87,
+ "ties": 51,
+ "match_logloss": 0.9618962125877293,
+ "tie_logloss": 0.5955519561360432,
+ "tie_favourite_advanced": 0.7058823529411765,
+ "tie_favourite_advanced_n": 36
+}

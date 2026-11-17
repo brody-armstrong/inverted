@@ -16,5 +16,10 @@ D["pm"] = D.abbr.map(PM)
 out = {"source": "Polymarket, as listed on MLSsoccer.com (MLS Cup 2026 odds article), retrieved 2026-11-16", "pct": PM,
        "spearman_model": round(float(spearmanr(D.p_champ, D.pm).statistic), 2),
        "spearman_results_dc": round(float(spearmanr(D.p_champ_dc, D.pm).statistic), 2)}
+import pathlib
+if pathlib.Path("results/playoffs_profile_2026.csv").exists():
+    PF = pd.read_csv("results/playoffs_profile_2026.csv")
+    PF["pm"] = PF.abbr.map(PM)
+    out["spearman_profile"] = round(float(spearmanr(PF.p_champ, PF.pm).statistic), 2)
 json.dump(out, open("results/playoffs_market_check.json", "w"), indent=1)
-print(out["spearman_model"], out["spearman_results_dc"])
+print(out)

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Who moves on? 2026 MLS Cup Playoffs forecast · Brody Armstrong</title>
-<meta name="description" content="Every 2026 MLS Cup Playoffs tie forecast from team ratings built on the closing odds of {{matches}} regular-season matches, with a backtest on the 2023–2025 playoffs.">
+<meta name="description" content="Every 2026 MLS Cup Playoffs tie forecast two ways: from betting lines, and from team and player profiles alone. Both backtested on the 2023–2025 playoffs.">
 <link rel="stylesheet" href="../../assets/style.css">
 <style>
 .bracket{display:grid;gap:18px}
@@ -15,7 +15,9 @@
 .round .stack{flex:1;display:flex;flex-direction:column;gap:10px;justify-content:space-around}
 .round>h4{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0;font-weight:600}
 .slot{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff}
+.slot.split{border-color:#c2410c;border-width:2px}
 .slot .lab{font-size:13px;color:var(--muted);margin:0 0 6px;line-height:1.35}
+.slot .other{font-size:13px;color:#8a3b12;margin:6px 0 0;font-weight:600}
 .slot ol{list-style:none;margin:0;padding:0;display:grid;gap:4px}
 .slot li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;font-size:15px;align-items:center}
 .slot li .bar{grid-column:1 / -1;height:5px;background:var(--soft);border-radius:3px;overflow:hidden}
@@ -27,13 +29,29 @@
 .cup{border:2px solid var(--ink);border-radius:12px;padding:16px;max-width:560px;margin:0 auto}
 .cup .slot{border:0;padding:0}
 .tick{color:var(--accent);font-weight:700}
+.lens{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px}
+.lens button{font:inherit;min-height:44px;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:600}
+.lens button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.lensnote{font-size:15px;color:var(--muted);margin:4px 0 14px}
 .runs{margin-top:16px;display:grid;gap:10px}
 .runs .rnd{border:1px solid var(--line);border-radius:10px;padding:10px 14px}
 .runs .rnd h4{margin:0 0 6px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .runs ul{margin:0;padding-left:18px;font-size:15px}
 .runs .champ{font-size:19px;font-weight:650;margin:0}
-button.btn{font:inherit;font-weight:650;border:0;cursor:pointer}
 .upset{color:#8a3b12;font-weight:600}
+button.btn{font:inherit;font-weight:650;border:0;cursor:pointer}
+.mcards{display:grid;gap:14px;grid-template-columns:1fr}
+@media (min-width:900px){.mcards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.mcard{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff}
+.mcard h3{margin:0 0 4px;font-size:18px}
+.mcard .sub{font-size:14px;color:var(--muted);margin:0 0 10px}
+.mcard .xg{font-size:15px;margin:0 0 10px}
+.edges{width:100%;border-collapse:collapse;font-size:14px}
+.edges th,.edges td{padding:5px 4px;border-top:1px solid var(--line);text-align:left}
+.edges th{font-weight:600;color:var(--muted);font-size:13px}
+.edges td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.edges td.win{font-weight:700;color:var(--accent)}
+.mcard .verdict{margin:10px 0 0;font-size:15px}
 </style>
 </head>
 <body>
@@ -57,16 +75,16 @@ button.btn{font:inherit;font-weight:650;border:0;cursor:pointer}
 <section class="hero" style="padding-top:8px">
   <div class="wrap measure">
     <p class="kicker">Inverted · 2026 MLS Cup Playoffs</p>
-    <h1>Who moves on? A forecast for every 2026 playoff tie</h1>
-    <p class="lead">Each team's chance of winning every round of the bracket, from team ratings built on the closing odds of all {{matches}} regular-season matches. The projected winner of each tie is the team with the better chance. The percentages show how much to trust each pick.</p>
-    <p class="small">Computed on 16 November 2026, before the wild-card matches on 19 November. This version stays as it is so it can be checked against the results. Any update will be published alongside it.</p>
+    <h1>Who moves on? Every 2026 playoff tie, forecast two ways</h1>
+    <p class="lead">One forecast reads the betting market. The other ignores it, and judges each team only by its profile: how it creates chances, how it concedes them, and the players it has been using. Where the two agree, the pick is solid. Where they split, there is something worth a closer look.</p>
+    <p class="small">Computed on 16 November 2026, before the wild-card matches on 19 November. This version stays as it is so both forecasts can be checked against the results. Any update will be published alongside it.</p>
   </div>
   <div class="wrap" style="margin-top:22px">
     <ul class="facts">
-      <li><strong>{{p_top}}%</strong><span>{{top_name}}, the most likely champion</span></li>
-      <li><strong>{{p_shield}}%</strong><span>Nashville, Supporters' Shield winners on {{nsh_pts}} points</span></li>
-      <li><strong>{{p_fav_not}}%</strong><span>chance the most likely champion does not win MLS Cup</span></li>
-      <li><strong>{{rho_market}}</strong><span>rank correlation with prediction-market title odds</span></li>
+      <li><strong>{{p_top}}% · {{pp_top}}%</strong><span>{{top_name}}, favourite in both forecasts (market · profiles)</span></li>
+      <li><strong>{{n_split}}</strong><span>places in the bracket where the two forecasts pick different teams</span></li>
+      <li><strong>{{pf_fav_n}} of {{bt_ties}}</strong><span>past playoff ties called by the profile forecast (market: {{fav_n}})</span></li>
+      <li><strong>Not supported</strong><span>style matchups, tested on {{pt_matches}} matches before use</span></li>
     </ul>
   </div>
 </section>
@@ -74,16 +92,29 @@ button.btn{font:inherit;font-weight:650;border:0;cursor:pointer}
 <section aria-labelledby="bracket-h">
   <div class="wrap">
     <h2 id="bracket-h">The bracket</h2>
-    <p class="measure">Each box is one place in the bracket. The teams that could fill it are listed by their chance of getting there, and <span class="tick">✓</span> marks the projected winner. Round One is best of three; later rounds are one game with extra time and penalties.</p>
+    <p class="measure">Each box is one place in the bracket. The teams that could fill it are listed by their chance of getting there, and <span class="tick">✓</span> marks the projected winner. A box with an orange border is one where the other forecast picks a different team. Round One is best of three; later rounds are one game with extra time and penalties.</p>
+    <div class="lens" role="group" aria-label="Choose forecast">
+      <button type="button" data-lens="market" aria-pressed="true">Market forecast</button>
+      <button type="button" data-lens="profile" aria-pressed="false">Profile forecast</button>
+    </div>
+    <p class="lensnote" id="lensnote"></p>
     <div class="bracket" id="bracket"></div>
     <div class="cup" id="cup" style="margin-top:18px"></div>
+  </div>
+</section>
+
+<section aria-labelledby="mu-h">
+  <div class="wrap">
+    <h2 id="mu-h">Who has the upper hand, tie by tie</h2>
+    <p class="measure">The profile forecast scores each team on how it creates chances (through receiving, passing, dribbling and shooting) and how much it concedes the same way. For each tie, a row shows how much each side's chances should rise or fall in that area against this opponent, compared with an average MLS match-up. The expected-goals line is for a game at the higher seed.</p>
+    <div class="mcards" id="mcards"></div>
   </div>
 </section>
 
 <section aria-labelledby="play-h">
   <div class="wrap measure">
     <h2 id="play-h">Play it out</h2>
-    <p>The percentages above are exact averages. Each click below plays every game once, with goals drawn from the same ratings, so you can see how one playoff might actually unfold. The projected winner of each tie loses often. In Paper 1's simulations, the strongest team wins the Supporters' Shield in 28% of seasons but MLS Cup in only 20%. The Shield winner has won MLS Cup twice in 12 full seasons.</p>
+    <p>The percentages above are exact averages. Each click below plays every game once, with goals drawn from the forecast selected above, so you can see how one playoff might actually unfold. The projected winner of each tie loses often. In Paper 1's simulations, the strongest team wins the Supporters' Shield in 28% of seasons but MLS Cup in only 20%. The Shield winner has won MLS Cup twice in 12 full seasons.</p>
     <div class="actions"><button class="btn" id="play" type="button">Play the playoffs once</button></div>
     <p class="small" id="tally" aria-live="polite" style="margin-top:12px"></p>
     <div class="runs" id="run" aria-live="polite"></div>
@@ -93,10 +124,10 @@ button.btn{font:inherit;font-weight:650;border:0;cursor:pointer}
 <section aria-labelledby="table-h">
   <div class="wrap">
     <h2 id="table-h">Every team, every round</h2>
-    <p class="measure">Chance of reaching each stage. The last column shows prediction-market title odds (Polymarket, as listed by MLSsoccer.com, retrieved 16 November 2026) for comparison.</p>
+    <p class="measure">Chance of reaching each stage under the forecast selected above, then the title chance under each forecast and in a prediction market (Polymarket, as listed by MLSsoccer.com, retrieved 16 November 2026).</p>
     <div class="tablebox">
       <table>
-        <thead><tr><th scope="col">Team</th><th scope="col" class="num">Seed</th><th scope="col" class="num">Pts</th><th scope="col" class="num">Conf. semis</th><th scope="col" class="num">Conf. final</th><th scope="col" class="num">MLS Cup final</th><th scope="col" class="num">Champion</th><th scope="col" class="num">Market</th></tr></thead>
+        <thead><tr><th scope="col">Team</th><th scope="col" class="num">Seed</th><th scope="col" class="num">Pts</th><th scope="col" class="num">Conf. semis</th><th scope="col" class="num">Conf. final</th><th scope="col" class="num">MLS Cup final</th><th scope="col" class="num">Champion: market</th><th scope="col" class="num">Champion: profiles</th><th scope="col" class="num">Polymarket</th></tr></thead>
         <tbody id="tbody"></tbody>
       </table>
     </div>
@@ -105,30 +136,58 @@ button.btn{font:inherit;font-weight:650;border:0;cursor:pointer}
 
 <section aria-labelledby="gap-h">
   <div class="wrap measure">
-    <h2 id="gap-h">Where the model and the market disagree</h2>
-    <p>The model and the prediction market agree on the order of the field (rank correlation {{rho_market}}) and on the same three favourites. The one large gap is Vancouver: {{p_van}}% here against {{pm_van}}% in the market. Nashville ({{p_nsh}}% vs {{pm_nsh}}%) and Inter Miami ({{p_mia}}% vs {{pm_mia}}%) are close.</p>
-    <p>The model sees only the regular-season betting lines and the shape of the bracket. A market can also price news the model cannot see, such as injuries, suspensions and who is available. A gap is a question to look into, not a sign that either side is wrong.</p>
-    <p>A second check uses Paper 1's Dixon-Coles model, fitted to 2026 goals instead of betting lines. It changes the top of the order: Nashville {{dc_nsh}}%, Vancouver {{dc_van}}%, Inter Miami {{dc_mia}}%. In the backtest below, ratings from goals predicted playoff matches less well than ratings from betting lines, so this page uses the betting-line ratings.</p>
+    <h2 id="gap-h">Where the forecasts disagree</h2>
+    <p>Both forecasts make {{top_name}} the favourite. Their four disagreements:</p>
+    <ul>
+      <li><strong>Chicago.</strong> The profile forecast likes Chicago ({{pp_chi}}% to win MLS Cup, against {{p_chi}}% from the market). Chicago's attack is built mainly on passing, the biggest passing contribution of any playoff team. In the East the profile forecast has Chicago ({{pf_chi_f}}%), Nashville ({{pf_nsh_f}}%) and Inter Miami ({{pf_mia_f}}%) almost level for the conference title. The market has Nashville clear on {{mk_nsh_f}}%.</li>
+      <li><strong>San Jose v Houston.</strong> The market has this one close (Houston {{mk_hou_sf}}%); the profile forecast makes San Jose a {{pf_sje_sf}}% favourite. Houston's attacking profile is the weakest in the West field.</li>
+      <li><strong>The West's lower half.</strong> The profile forecast has FC Dallas narrowly ahead of LAFC and St. Louis for a place in the conference final; the market has LAFC.</li>
+      <li><strong>Nashville.</strong> The market has Nashville on {{p_nsh}}% to win it all; the profiles have them on {{pp_nsh}}%. Their profile is built on defence more than attack.</li>
+    </ul>
+    <p>The profile forecast never sees the betting lines, and the market can price news the profiles cannot see, such as injuries. A disagreement is a question to look into, not a sign that either side is wrong. Against the prediction market's title odds, the rank correlation is {{rho_market}} for the market forecast and {{rho_profile}} for the profile forecast.</p>
+  </div>
+</section>
+
+<section aria-labelledby="pf-h">
+  <div class="wrap measure">
+    <h2 id="pf-h">The profile forecast, and what did not work</h2>
+    <p>The profile forecast predicts each side's expected goals from its profile and its opponent's, using public American Soccer Analysis data from {{pt_matches}} regular-season matches (2017–2025, excluding 2020):</p>
+    <ul>
+      <li><strong>How a team creates:</strong> goals added (g+) per game through receiving, passing, dribbling and shooting, plus possession.</li>
+      <li><strong>How a team concedes:</strong> g+ conceded per game through the same four actions, plus how hard it presses.</li>
+      <li><strong>Who has been playing:</strong> minute-weighted ratings of each team's wide attackers, strikers and 10s, fullbacks and centre-backs, using players' minutes in the last ten weeks of the season.</li>
+    </ul>
+    <p>The idea worth testing was that matchups matter: that a team which creates through dribbling does extra damage to a team that leaks chances to dribblers, or that a possession side struggles against a press. Before any model was fitted, seven such matchups were written down in the project log, with a rule. The matchups would be used only if adding them improved predictions in at least 7 of 8 held-out seasons.</p>
+    <p><strong>The matchup effects were not supported.</strong> They improved predictions in {{pt_imp}} of 8 seasons, and on average made them slightly worse. Every one of the seven estimates is close to zero, with an interval that includes zero:</p>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th scope="col">Matchup</th><th scope="col" class="num">Effect on xG</th><th scope="col" class="num">95% interval</th></tr></thead>
+        <tbody id="hyp"></tbody>
+      </table>
+    </div>
+    <p class="small" style="margin-top:8px">Effect is the change in log expected goals for one standard deviation of both features together. An effect of 0.01 is about a 1% change in expected goals.</p>
+    <p>So the profile forecast uses each team's own profile only: what a team does matters, but how its style meets the opponent's barely does. The tie-by-tie breakdown above shows where each side's edge comes from; it adds no matchup effect on top. The player-unit ratings also added little beyond the team profiles, so recent changes in who plays barely move this forecast.</p>
   </div>
 </section>
 
 <section aria-labelledby="bt-h">
   <div class="wrap measure">
     <h2 id="bt-h">Has this worked before?</h2>
-    <p>The same method was run on the 2023, 2024 and 2025 playoffs, the three seasons played under the current format. Each season's ratings came from that season's regular season only. The test covers {{bt_matches}} playoff matches and {{bt_ties}} ties.</p>
+    <p>Both forecasts were run on the 2023, 2024 and 2025 playoffs, the three seasons played under the current format, using each season's regular season only. For the profile forecast, the model was also refitted without the season being tested. The test covers {{bt_matches}} playoff matches and {{bt_ties}} ties.</p>
     <div class="tablebox">
       <table>
-        <thead><tr><th scope="col">Forecast of each playoff match (90-minute result)</th><th scope="col" class="num">Log loss</th></tr></thead>
+        <thead><tr><th scope="col">Forecast</th><th scope="col" class="num">Match log loss</th><th scope="col" class="num">Tie log loss</th><th scope="col" class="num">Favourite went through</th></tr></thead>
         <tbody>
-          <tr><td>Closing odds of that playoff match</td><td class="num">{{ll_close}}</td></tr>
-          <tr><td><strong>This model</strong> (regular-season betting lines)</td><td class="num"><strong>{{ll_model}}</strong></td></tr>
-          <tr><td>Paper 1 model on goals only</td><td class="num">{{ll_dc}}</td></tr>
-          <tr><td>League-wide home, draw and away rates</td><td class="num">{{ll_base}}</td></tr>
+          <tr><td>Closing odds of that playoff match</td><td class="num">{{ll_close}}</td><td class="num">–</td><td class="num">–</td></tr>
+          <tr><td><strong>Market forecast</strong> (regular-season betting lines)</td><td class="num">{{ll_model}}</td><td class="num">{{tie_ll}}</td><td class="num">{{fav_n}} of {{bt_ties}}</td></tr>
+          <tr><td><strong>Profile forecast</strong> (no betting data)</td><td class="num">{{pf_ll}}</td><td class="num">{{pf_tie_ll}}</td><td class="num">{{pf_fav_n}} of {{bt_ties}}</td></tr>
+          <tr><td>Paper 1 model on goals only</td><td class="num">{{ll_dc}}</td><td class="num">–</td><td class="num">–</td></tr>
+          <tr><td>League-wide base rates / coin flip</td><td class="num">{{ll_base}}</td><td class="num">{{coin_ll}}</td><td class="num">–</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="small" style="margin-top:8px">Lower is better. The closing odds of a playoff match know about injuries and lineups on match day, so they are the bar to aim for, not one to beat.</p>
-    <p>At the level of whole ties, the model's favourite went through in {{fav_n}} of {{bt_ties}} ties ({{fav_pct}}%), with a log loss of {{tie_ll}} against {{coin_ll}} for a coin flip. The 90-day weighting of recent matches was chosen before the backtest was run. A 60-day weighting scored slightly better ({{ll_hl60}}); the difference is small and the setting was not changed.</p>
+    <p class="small" style="margin-top:8px">Lower log loss is better. The closing odds of a playoff match know about injuries and lineups on match day, so they are the bar to aim for, not one to beat.</p>
+    <p>The profile forecast did as well as the market forecast, without any betting data: the same match log loss, and three more ties called. With {{bt_ties}} ties, that difference is too small to call one better. The 90-day weighting in the market forecast was chosen before the backtest. A 60-day weighting scored slightly better ({{ll_hl60}}); the setting was not changed.</p>
   </div>
 </section>
 
@@ -136,9 +195,12 @@ button.btn{font:inherit;font-weight:650;border:0;cursor:pointer}
   <div class="wrap measure">
     <h2 id="how-h">How it works</h2>
     <details>
-      <summary>Ratings</summary>
-      <p>Each regular-season match's closing odds (Pinnacle, or the market average where Pinnacle is missing, with the bookmaker margin removed) are turned into an expected number of goals for each side. A least-squares fit then gives every club an attack and a defence rating plus a league-wide home advantage, with recent matches weighted more (90-day half-life). This is the same scoring model as Paper 1 and the same conversion from odds as Paper 2. Home teams score about {{home_mult}} times as many goals as they would on neutral ground.</p>
-      <p>To carry uncertainty in the ratings, the fit is repeated on {{draws}} resamples of the season's matches, and every probability is averaged over them.</p>
+      <summary>Market forecast</summary>
+      <p>Each regular-season match's closing odds (Pinnacle, or the market average where Pinnacle is missing, with the bookmaker margin removed) are turned into an expected number of goals for each side. A least-squares fit then gives every club an attack and a defence rating plus a league-wide home advantage, with recent matches weighted more (90-day half-life). This is the same scoring model as Paper 1 and the same conversion from odds as Paper 2. Home teams score about {{home_mult}} times as many goals as they would on neutral ground. The fit is repeated on {{draws}} resamples of the season's matches, and the probabilities are averaged over them.</p>
+    </details>
+    <details>
+      <summary>Profile forecast</summary>
+      <p>A Poisson regression of each side's match xG on its attacking profile and its opponent's defensive profile, with all features standardised within each season. The 2026 forecast uses the 2026 regular-season profiles. Uncertainty comes from {{draws}} draws of the model's coefficients, and both forecasts use the same bracket engine.</p>
     </details>
     <details>
       <summary>Playoff rules</summary>
@@ -157,14 +219,14 @@ button.btn{font:inherit;font-weight:650;border:0;cursor:pointer}
     <details>
       <summary>Limits</summary>
       <ul>
-        <li><strong>Who is available.</strong> The ratings cannot see injuries, suspensions or call-ups. Paper 2's absence study found that losing a team's best player costs far more than losing a depth player, so a missing star matters most.</li>
+        <li><strong>Who is available.</strong> Neither forecast sees injuries, suspensions or call-ups. Paper 2's absence study found that losing a team's best player costs far more than losing a depth player, so a missing star matters most.</li>
         <li><strong>Shootouts</strong> are treated as coin flips, and every club gets the same home advantage.</li>
-        <li><strong>Built on the market.</strong> The ratings come from betting lines, so the model is calibrated against the market rather than independent of it.</li>
+        <li><strong>Built on the market.</strong> The market forecast's ratings come from betting lines, so it is calibrated against the market rather than independent of it. The profile forecast is the independent one.</li>
       </ul>
     </details>
-    <p style="margin-top:18px">Match data from <a href="https://www.americansocceranalysis.com/">American Soccer Analysis</a>. Closing odds from <a href="https://www.football-data.co.uk/">football-data.co.uk</a>. Code: <a href="https://github.com/brody-armstrong/inverted/tree/main/mls/src/playoffs">mls/src/playoffs</a>.</p>
+    <p style="margin-top:18px">Match, player and team data from <a href="https://www.americansocceranalysis.com/">American Soccer Analysis</a>. Closing odds from <a href="https://www.football-data.co.uk/">football-data.co.uk</a>. Code: <a href="https://github.com/brody-armstrong/inverted/tree/main/mls/src/playoffs">mls/src/playoffs</a>.</p>
     <div class="actions">
-      <a class="btn" href="../simulator/">Open the roster simulator</a>
+      <a class="btn" href="../profiles/">Explore the player profiles</a>
       <a class="btn ghost" href="../random/">Paper 1: how much is chance?</a>
     </div>
   </div>
@@ -186,50 +248,105 @@ button.btn{font:inherit;font-weight:650;border:0;cursor:pointer}
 const DATA = {{data_json}};
 {{engine_js}}
 (function () {
-  const P = DATA.probs, T = DATA.teams, S = DATA.seeds, M = DATA.market;
+  const T = DATA.teams, S = DATA.seeds, MK = DATA.market, L = DATA.lenses, PF = DATA.profile;
+  let lens = "market";
   const nm = t => T[t].short, pct = p => p >= 0.995 ? ">99" : p < 0.005 ? "<1" : String(Math.round(p * 100));
+  const NOTE = { market: "Market forecast: team ratings from the closing odds of every regular-season match.",
+                 profile: "Profile forecast: team ratings from how each side creates and concedes chances. No betting data." };
+  const pickOf = (lz, teams, key) => teams.slice().sort((a, b) => L[lz].probs[b][key] - L[lz].probs[a][key])[0];
   function slot(label, teams, key, show) {
+    const P = L[lens].probs, other = lens === "market" ? "profile" : "market";
     const rows = teams.map(t => [t, P[t][key]]).sort((a, b) => b[1] - a[1]);
     const top = rows.slice(0, show), rest = rows.slice(show).reduce((s, r) => s + r[1], 0);
-    let h = `<div class="slot"><p class="lab">${label}</p><ol>`;
+    const op = pickOf(other, teams, key), split = op !== rows[0][0];
+    let h = `<div class="slot${split ? " split" : ""}"><p class="lab">${label}</p><ol>`;
     top.forEach(([t, p], i) => { h += `<li class="${i === 0 ? "pick" : ""}"><span>${i === 0 ? '<span class="tick" aria-label="Projected winner">✓</span> ' : ""}${nm(t)}</span><span class="p">${pct(p)}%</span><span class="bar" aria-hidden="true"><i style="width:${(p * 100).toFixed(1)}%"></i></span></li>`; });
     if (rest >= 0.005) h += `<li class="rest"><span>Others</span><span class="p">${pct(rest)}%</span></li>`;
-    return h + "</ol></div>";
+    h += "</ol>";
+    if (split) h += `<p class="other">${other === "market" ? "Market" : "Profile"} forecast picks ${nm(op)} (${pct(L[other].probs[op][key])}%)</p>`;
+    return h + "</div>";
   }
-  let html = "";
-  for (const c of ["East", "West"]) {
-    const s = S[c], f = i => s[i - 1];
-    html += `<div class="conf"><h3>${c === "East" ? "Eastern" : "Western"} Conference</h3><div class="rounds">`;
-    html += `<div class="round"><h4>Wild card</h4><div class="stack">${slot(`8 v 9 · at ${nm(f(8))}`, [f(8), f(9)], "r1", 2)}</div></div>`;
-    html += `<div class="round"><h4>Round One</h4><div class="stack">`
-      + slot(`1 v 8/9 · ${nm(f(1))} v ${nm(f(8))}/${nm(f(9))}`, [f(1), f(8), f(9)], "sf", 3)
-      + slot(`4 v 5 · ${nm(f(4))} v ${nm(f(5))}`, [f(4), f(5)], "sf", 2)
-      + slot(`2 v 7 · ${nm(f(2))} v ${nm(f(7))}`, [f(2), f(7)], "sf", 2)
-      + slot(`3 v 6 · ${nm(f(3))} v ${nm(f(6))}`, [f(3), f(6)], "sf", 2) + `</div></div>`;
-    html += `<div class="round"><h4>Semifinals</h4><div class="stack">`
-      + slot("Winner of 1 v 8/9 against winner of 4 v 5", [f(1), f(8), f(9), f(4), f(5)], "cf", 3)
-      + slot("Winner of 2 v 7 against winner of 3 v 6", [f(2), f(7), f(3), f(6)], "cf", 3) + `</div></div>`;
-    html += `<div class="round"><h4>Conference final</h4><div class="stack">${slot(`${c} champion`, s, "final", 4)}</div></div>`;
-    html += `</div></div>`;
+  function drawBracket() {
+    let html = "";
+    for (const c of ["East", "West"]) {
+      const s = S[c], f = i => s[i - 1];
+      html += `<div class="conf"><h3>${c === "East" ? "Eastern" : "Western"} Conference</h3><div class="rounds">`;
+      html += `<div class="round"><h4>Wild card</h4><div class="stack">${slot(`8 v 9 · at ${nm(f(8))}`, [f(8), f(9)], "r1", 2)}</div></div>`;
+      html += `<div class="round"><h4>Round One</h4><div class="stack">`
+        + slot(`1 v 8/9 · ${nm(f(1))} v ${nm(f(8))}/${nm(f(9))}`, [f(1), f(8), f(9)], "sf", 3)
+        + slot(`4 v 5 · ${nm(f(4))} v ${nm(f(5))}`, [f(4), f(5)], "sf", 2)
+        + slot(`2 v 7 · ${nm(f(2))} v ${nm(f(7))}`, [f(2), f(7)], "sf", 2)
+        + slot(`3 v 6 · ${nm(f(3))} v ${nm(f(6))}`, [f(3), f(6)], "sf", 2) + `</div></div>`;
+      html += `<div class="round"><h4>Semifinals</h4><div class="stack">`
+        + slot("Winner of 1 v 8/9 against winner of 4 v 5", [f(1), f(8), f(9), f(4), f(5)], "cf", 3)
+        + slot("Winner of 2 v 7 against winner of 3 v 6", [f(2), f(7), f(3), f(6)], "cf", 3) + `</div></div>`;
+      html += `<div class="round"><h4>Conference final</h4><div class="stack">${slot(`${c} champion`, s, "final", 4)}</div></div>`;
+      html += `</div></div>`;
+    }
+    document.getElementById("bracket").innerHTML = html;
+    document.getElementById("cup").innerHTML = `<h3 style="margin:0 0 8px">MLS Cup · 18 December</h3>` + slot("Champion", [...S.East, ...S.West], "champ", 6);
+    document.getElementById("lensnote").textContent = NOTE[lens];
+    let rows = "";
+    for (const c of ["East", "West"]) S[c].forEach((t, i) => {
+      const P = L[lens].probs[t];
+      rows += `<tr><td>${T[t].name}</td><td class="num">${c[0]}${i + 1}</td><td class="num">${T[t].pts}</td>`
+        + ["sf", "cf", "final"].map(k => `<td class="num">${pct(P[k])}%</td>`).join("")
+        + `<td class="num">${pct(L.market.probs[t].champ)}%</td><td class="num">${pct(L.profile.probs[t].champ)}%</td>`
+        + `<td class="num">${MK[t] < 1 ? "<1" : MK[t]}%</td></tr>`;
+    });
+    document.getElementById("tbody").innerHTML = rows;
   }
-  document.getElementById("bracket").innerHTML = html;
-  document.getElementById("cup").innerHTML = `<h3 style="margin:0 0 8px">MLS Cup · 18 December</h3>` + slot("Champion", [...S.East, ...S.West], "champ", 6);
+  document.querySelectorAll(".lens button").forEach(b => b.addEventListener("click", () => {
+    lens = b.dataset.lens;
+    document.querySelectorAll(".lens button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    drawBracket(); runs = 0; favWins = 0;
+    document.getElementById("run").innerHTML = ""; document.getElementById("tally").textContent = "";
+    document.getElementById("play").textContent = "Play the playoffs once";
+  }));
 
-  let rows = "";
-  for (const c of ["East", "West"]) S[c].forEach((t, i) => {
-    rows += `<tr><td>${T[t].name}</td><td class="num">${c[0]}${i + 1}</td><td class="num">${T[t].pts}</td>`
-      + ["sf", "cf", "final", "champ"].map(k => `<td class="num">${pct(P[t][k])}%</td>`).join("")
-      + `<td class="num">${M[t] < 1 ? "<1" : M[t]}%</td></tr>`;
-  });
-  document.getElementById("tbody").innerHTML = rows;
+  // matchup cards (profile forecast, point estimates)
+  const ACT = [["Receiving", "Receiving in dangerous areas"], ["Passing", "Passing"], ["Dribbling", "Dribbling and carrying"], ["Shooting", "Shooting"]];
+  const C = PF.contrib, pt = PF.point;
+  const edge = (a, b, k) => C[a].att["gpf_" + k] - C[b].def["gpa_" + k];
+  const styleEdge = (a, b) => ["possession", "wide_att", "central_att"].reduce((s, k) => s + C[a].att[k], 0)
+                            - ["press", "fb_unit", "cb_unit"].reduce((s, k) => s + C[b].def[k], 0);
+  const tot = (a, b) => Object.values(C[a].att).reduce((s, v) => s + v, 0) - Object.values(C[b].def).reduce((s, v) => s + v, 0);
+  const sg = e => { const v = Math.round((Math.exp(e) - 1) * 100); return (v > 0 ? "+" : v < 0 ? "−" : "±") + Math.abs(v) + "%"; };
+  // exact P(host side wins the tie), averaged over a forecast's rating draws
+  function pmf(l) { const o = [Math.exp(-l)]; for (let k = 1; k <= 10; k++) o.push(o[k - 1] * l / k); return o; }
+  function g90(D, h, a) { const x = pmf(Math.exp(D.c + D.h + D.a[h] - D.d[a])), y = pmf(Math.exp(D.c + D.a[a] - D.d[h]));
+    let w = 0, d = 0; for (let i = 0; i <= 10; i++) for (let j = 0; j <= 10; j++) { const p = x[i] * y[j]; if (i > j) w += p; else if (i === j) d += p; } return w + d / 2; }
+  function tieProb(lz, hi, lo, single) { const dr = L[lz].draws; let t = 0;
+    for (const D of dr) { const g1 = g90(D, hi, lo); if (single) { t += g1; continue; } const g2 = 1 - g90(D, lo, hi);
+      t += g1 * g2 + g1 * (1 - g2) * g1 + (1 - g1) * g2 * g1; } return t / dr.length; }
+  let mc = "";
+  for (const c of ["East", "West"]) {
+    const s = S[c];
+    const ties = [[s[7], s[8], "Wild card", "r1"], [s[0], null, "1 v 8/9", "sf"], [s[3], s[4], "4 v 5", "sf"], [s[1], s[6], "2 v 7", "sf"], [s[2], s[5], "3 v 6", "sf"]];
+    for (let [a, b, lab, key] of ties) {
+      if (!b) b = L.profile.probs[s[7]].r1 >= L.profile.probs[s[8]].r1 ? s[7] : s[8];
+      const xa = Math.exp(pt.c + pt.h + tot(a, b)), xb = Math.exp(pt.c + tot(b, a));
+      let rows = ACT.map(([k, label]) => { const ea = edge(a, b, k), eb = edge(b, a, k);
+        return `<tr><td>${label}</td><td class="n${ea > eb ? " win" : ""}">${sg(ea)}</td><td class="n${eb > ea ? " win" : ""}">${sg(eb)}</td></tr>`; }).join("");
+      const sa = styleEdge(a, b), sb = styleEdge(b, a);
+      rows += `<tr><td>Possession, press and units</td><td class="n${sa > sb ? " win" : ""}">${sg(sa)}</td><td class="n${sb > sa ? " win" : ""}">${sg(sb)}</td></tr>`;
+      const pA = tieProb("profile", a, b, key === "r1"), mA = tieProb("market", a, b, key === "r1");
+      const fav = pA >= 0.5 ? a : b, pf = Math.max(pA, 1 - pA), mf = fav === a ? mA : 1 - mA;
+      mc += `<article class="mcard"><h3>${nm(a)} v ${nm(b)}</h3><p class="sub">${c} · ${lab}${lab === "1 v 8/9" ? ` (${nm(b)} is the profile pick from the wild card)` : ""}</p>`
+        + `<p class="xg">Expected goals at ${nm(a)}: <strong>${nm(a)} ${xa.toFixed(2)} – ${xb.toFixed(2)} ${nm(b)}</strong></p>`
+        + `<table class="edges"><thead><tr><th scope="col">Where chances come from</th><th scope="col" class="n">${nm(a)}</th><th scope="col" class="n">${nm(b)}</th></tr></thead><tbody>${rows}</tbody></table>`
+        + `<p class="verdict"><strong>${nm(fav)}</strong> go through ${Math.round(pf * 100)}% of the time on profiles, ${Math.round(mf * 100)}% on the market.</p></article>`;
+    }
+  }
+  document.getElementById("mcards").innerHTML = mc;
+  document.getElementById("hyp").innerHTML = DATA.hyp.map(h => `<tr><td>${h.label}</td><td class="num">${h.coef >= 0 ? "+" : "−"}${Math.abs(h.coef).toFixed(3)}</td><td class="num">${h.lo >= 0 ? "+" : "−"}${Math.abs(h.lo).toFixed(3)} to ${h.hi >= 0 ? "+" : "−"}${Math.abs(h.hi).toFixed(3)}</td></tr>`).join("");
 
   // play it out
-  const fav = Object.keys(P).sort((a, b) => P[b].champ - P[a].champ)[0];
   let runs = 0, favWins = 0, rng = Math.random;
   const g = x => `${x.host} ${x.hg}–${x.ag} ${x.guest}${x.et ? " (a.e.t.)" : ""}${x.pens ? `, ${x.winner} on penalties` : ""}`;
-  const up = (w, l, key) => P[w][key] < P[l][key];
   function render(o) {
-    const R = o.rounds, part = [];
+    const P = L[lens].probs, R = o.rounds, part = [];
+    const up = (w, l, key) => P[w][key] < P[l][key];
     part.push(["Wild card", R.wc.map(x => `<li>${g(x)}</li>`)]);
     part.push(["Round One", R.r1.map(t => { const l = t.winner === t.hi ? t.lo : t.hi;
       const w = t.games.filter(x => x.winner === t.winner).length, ls = t.games.length - w;
@@ -242,11 +359,13 @@ const DATA = {{data_json}};
     document.getElementById("run").innerHTML = h;
   }
   document.getElementById("play").addEventListener("click", () => {
-    const o = playBracket(DATA, rng); runs++; if (o.champion === fav) favWins++;
+    const P = L[lens].probs, fav = Object.keys(P).sort((a, b) => P[b].champ - P[a].champ)[0];
+    const o = playBracket({ teams: T, seeds: S, draws: L[lens].draws }, rng); runs++; if (o.champion === fav) favWins++;
     render(o);
     document.getElementById("play").textContent = "Play it again";
-    document.getElementById("tally").textContent = `Runs so far: ${runs}. ${T[fav].short}, the most likely champion, won ${favWins} of them.`;
+    document.getElementById("tally").textContent = `Runs so far (${lens} forecast): ${runs}. ${T[fav].short}, its most likely champion, won ${favWins} of them.`;
   });
+  drawBracket();
 })();
 </script>
 </body>

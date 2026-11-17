@@ -101,46 +101,47 @@ def run(draws):
     return {t: {k: float(np.mean(v)) for k, v in d.items()} for t, d in acc.items()}, acc
 
 
-end = R.kickoff_utc.max()
-point = fit_market(R, teams, 90, end)
-boot = fit_market(R, teams, 90, end, boot=200, rng=np.random.default_rng(2026))
-P_mkt, acc = run(boot)
-P_point, _ = run([point])
-for t, d in P_mkt.items():           # every team's stage probabilities must be non-increasing and conferences sum to 1
-    v = [d[k] for k in STAGES]; assert all(v[i] >= v[i + 1] - 1e-12 for i in range(len(v) - 1))
-for conf, names in SEEDS.items():
-    assert abs(sum(P_mkt[by_name[n]]["final"] for n in names) - 1) < 1e-9
-assert abs(sum(d["champ"] for d in P_mkt.values()) - 1) < 1e-9
+if __name__ == "__main__":
+    end = R.kickoff_utc.max()
+    point = fit_market(R, teams, 90, end)
+    boot = fit_market(R, teams, 90, end, boot=200, rng=np.random.default_rng(2026))
+    P_mkt, acc = run(boot)
+    P_point, _ = run([point])
+    for t, d in P_mkt.items():           # every team's stage probabilities must be non-increasing and conferences sum to 1
+        v = [d[k] for k in STAGES]; assert all(v[i] >= v[i + 1] - 1e-12 for i in range(len(v) - 1))
+    for conf, names in SEEDS.items():
+        assert abs(sum(P_mkt[by_name[n]]["final"] for n in names) - 1) < 1e-9
+    assert abs(sum(d["champ"] for d in P_mkt.values()) - 1) < 1e-9
 
-# Paper 1 Dixon-Coles on 2026 goals, as a check
-P_dc, _ = run(dc_draws(R, teams, n=200))
+    # Paper 1 Dixon-Coles on 2026 goals, as a check
+    P_dc, _ = run(dc_draws(R, teams, n=200))
 
-rows = []
-for conf, names in SEEDS.items():
-    for k, n in enumerate(names):
-        t = by_name[n]
-        rows.append({"conf": conf, "seed": k + 1, "team": n, "abbr": TN[t]["team_abbreviation"], **rec[t],
-                     "rating_gd": float(point["att"][idx[t]] + point["def"][idx[t]]),
-                     **{f"p_{s}": P_mkt[t][s] for s in STAGES},
-                     "p_champ_lo": float(np.percentile(acc[t]["champ"], 10)), "p_champ_hi": float(np.percentile(acc[t]["champ"], 90)),
-                     "p_champ_point": P_point[t]["champ"], "p_champ_dc": P_dc[t]["champ"]})
-D = pd.DataFrame(rows)
-D.to_csv("results/playoffs_2026.csv", index=False, float_format="%.4f")
-print(D[["conf", "seed", "abbr", "pts", "rating_gd", "p_r1", "p_sf", "p_cf", "p_final", "p_champ", "p_champ_lo", "p_champ_hi", "p_champ_dc"]]
-      .round(3).to_string(index=False))
+    rows = []
+    for conf, names in SEEDS.items():
+        for k, n in enumerate(names):
+            t = by_name[n]
+            rows.append({"conf": conf, "seed": k + 1, "team": n, "abbr": TN[t]["team_abbreviation"], **rec[t],
+                         "rating_gd": float(point["att"][idx[t]] + point["def"][idx[t]]),
+                         **{f"p_{s}": P_mkt[t][s] for s in STAGES},
+                         "p_champ_lo": float(np.percentile(acc[t]["champ"], 10)), "p_champ_hi": float(np.percentile(acc[t]["champ"], 90)),
+                         "p_champ_point": P_point[t]["champ"], "p_champ_dc": P_dc[t]["champ"]})
+    D = pd.DataFrame(rows)
+    D.to_csv("results/playoffs_2026.csv", index=False, float_format="%.4f")
+    print(D[["conf", "seed", "abbr", "pts", "rating_gd", "p_r1", "p_sf", "p_cf", "p_final", "p_champ", "p_champ_lo", "p_champ_hi", "p_champ_dc"]]
+          .round(3).to_string(index=False))
 
-# page data: point ratings + 200 bootstrap draws (for in-browser "play it out" runs)
-data = {"teams": {TN[t]["team_abbreviation"]: {"name": TN[t]["team_name"], "short": TN[t].get("team_short_name") or TN[t]["team_name"],
-                                                 **rec[t]} for t in teams if TN[t]["team_name"] in sum(SEEDS.values(), [])},
-        "seeds": {c: [TN[by_name[n]]["team_abbreviation"] for n in ns] for c, ns in SEEDS.items()},
-        "probs": {r["abbr"]: {s: round(r[f"p_{s}"], 4) for s in STAGES} | {"lo": round(r["p_champ_lo"], 4), "hi": round(r["p_champ_hi"], 4),
-                                                                              "dc": round(r["p_champ_dc"], 4)} for r in rows},
-        "draws": [{"c": round(float(d["c"]), 4), "h": round(float(d["home"]), 4),
-                   "a": {TN[t]["team_abbreviation"]: round(float(d["att"][idx[t]]), 4) for t in teams},
-                   "d": {TN[t]["team_abbreviation"]: round(float(d["def"][idx[t]]), 4) for t in teams}} for d in boot],
-        "meta": {"matches": int(len(R)), "half_life_days": 90, "draws": len(boot), "last_match": str(end.date()),
-                 "home_goals_mult": round(float(np.exp(point["home"])), 3)}}
-data["draws"] = [{"c": d["c"], "h": d["h"], "a": {k: v for k, v in d["a"].items() if k in data["teams"]},
-                  "d": {k: v for k, v in d["d"].items() if k in data["teams"]}} for d in data["draws"]]
-json.dump(data, open(OUT / "bracket.json", "w"), separators=(",", ":"))
-print("home advantage: goals x", data["meta"]["home_goals_mult"], "| bracket.json KB", (OUT / "bracket.json").stat().st_size // 1024)
+    # page data: point ratings + 200 bootstrap draws (for in-browser "play it out" runs)
+    data = {"teams": {TN[t]["team_abbreviation"]: {"name": TN[t]["team_name"], "short": TN[t].get("team_short_name") or TN[t]["team_name"],
+                                                     **rec[t]} for t in teams if TN[t]["team_name"] in sum(SEEDS.values(), [])},
+            "seeds": {c: [TN[by_name[n]]["team_abbreviation"] for n in ns] for c, ns in SEEDS.items()},
+            "probs": {r["abbr"]: {s: round(r[f"p_{s}"], 4) for s in STAGES} | {"lo": round(r["p_champ_lo"], 4), "hi": round(r["p_champ_hi"], 4),
+                                                                                  "dc": round(r["p_champ_dc"], 4)} for r in rows},
+            "draws": [{"c": round(float(d["c"]), 4), "h": round(float(d["home"]), 4),
+                       "a": {TN[t]["team_abbreviation"]: round(float(d["att"][idx[t]]), 4) for t in teams},
+                       "d": {TN[t]["team_abbreviation"]: round(float(d["def"][idx[t]]), 4) for t in teams}} for d in boot],
+            "meta": {"matches": int(len(R)), "half_life_days": 90, "draws": len(boot), "last_match": str(end.date()),
+                     "home_goals_mult": round(float(np.exp(point["home"])), 3)}}
+    data["draws"] = [{"c": d["c"], "h": d["h"], "a": {k: v for k, v in d["a"].items() if k in data["teams"]},
+                      "d": {k: v for k, v in d["d"].items() if k in data["teams"]}} for d in data["draws"]]
+    json.dump(data, open(OUT / "bracket.json", "w"), separators=(",", ":"))
+    print("home advantage: goals x", data["meta"]["home_goals_mult"], "| bracket.json KB", (OUT / "bracket.json").stat().st_size // 1024)

@@ -21,5 +21,6 @@
   "RSL": 0.5
  },
  "spearman_model": 0.92,
- "spearman_results_dc": 0.89
+ "spearman_results_dc": 0.89,
+ "spearman_profile": 0.88
 }
