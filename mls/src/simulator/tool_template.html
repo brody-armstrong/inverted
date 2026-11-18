@@ -114,7 +114,8 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
       </div>
       <datalist id="pool"></datalist>
       <div class="addrow">
-        <div class="field"><label for="sigsal">Or sign a new player at ($M)</label><input id="sigsal" type="number" min="0.1" max="20" step="0.25" value="1.5"></div>
+        <div class="field"><label for="signame">Or sign a new player: name</label><input id="signame" type="text" maxlength="40" placeholder="New signing" autocomplete="off"></div>
+        <div class="field"><label for="sigsal">Salary ($M)</label><input id="sigsal" type="number" min="0.1" max="20" step="0.25" value="1.5"></div>
         <div class="field"><label for="sigage">Age</label><input id="sigage" type="number" min="17" max="38" step="1" value="26"></div>
         <button type="button" id="addsig">Add signing</button>
       </div>
@@ -222,6 +223,7 @@ function slopePtsPerQ(res, Qs) {   // league-wide points per unit of team streng
 }
 // ---------- render ----------
 const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 let base = null;
 function allQ(override) { return rosters.map((r, i) => i === sel && override ? teamQ(override) : teamQ(r)); }
 function render() {
@@ -250,7 +252,7 @@ function render() {
   // roster
   const R = rosters[sel]; teamQ(R);
   const rows = R.map((p, j) => [p, j]).sort((a, b) => (a[0].out - b[0].out) || (b[0].r - a[0].r));
-  $("roster").querySelector("tbody").innerHTML = rows.map(([p, j]) => `<tr class="${p.out ? "out" : ""} ${p.added ? "added" : ""}"><td>${p.n}</td><td><span class="pill">${p.pos}</span></td><td class="n">${p.age ?? "–"}</td><td class="n">${fmt$(p.sal)}</td><td class="n">${imp(p.r)}</td><td class="n">${p.out ? "–" : Math.round(p.share * 100) + "%"}</td><td><button type="button" class="ghost mini" data-j="${j}">${p.out ? "Restore" : "Remove"}</button></td></tr>`).join("");
+  $("roster").querySelector("tbody").innerHTML = rows.map(([p, j]) => `<tr class="${p.out ? "out" : ""} ${p.added ? "added" : ""}"><td>${esc(p.n)}</td><td><span class="pill">${p.pos}</span></td><td class="n">${p.age ?? "–"}</td><td class="n">${fmt$(p.sal)}</td><td class="n">${imp(p.r)}</td><td class="n">${p.out ? "–" : Math.round(p.share * 100) + "%"}</td><td><button type="button" class="ghost mini" data-j="${j}">${p.out ? "Restore" : "Remove"}</button></td></tr>`).join("");
   $("roster").querySelectorAll("button[data-j]").forEach(b => b.onclick = () => { const p = R[+b.dataset.j]; if (p.added) R.splice(+b.dataset.j, 1); else p.out = !p.out; render(); });
   weakness(R, Qs); money(Qs, me);
   $("status").textContent = `Simulated ${N_SIM.toLocaleString()} seasons in ${Math.round(performance.now() - t0)} ms`;
@@ -270,7 +272,7 @@ function weakness(R) {
   let slot = 0, gap = 0; mineR.forEach((v, i) => { if (v - lg[i] < gap) { gap = v - lg[i]; slot = i; } });
   const names = { GK: "goalkeeper", D: "defence", M: "midfield", F: "attack" };
   $("weak-text").innerHTML = worst[1] < 0 ? `<strong>${names[worst[0]][0].toUpperCase() + names[worst[0]].slice(1)}</strong> is furthest below the league average. ` +
-    (gap < 0 ? `The weakest starter slot is #${slot + 1} (${act[slot]?.n ?? "–"}, impact ${imp(mineR[slot])} vs league ${imp(lg[slot])} for that slot).` : "")
+    (gap < 0 ? `The weakest starter slot is #${slot + 1} (${esc(act[slot]?.n ?? "–")}, impact ${imp(mineR[slot])} vs league ${imp(lg[slot])} for that slot).` : "")
     : "Every position group is at or above the league average.";
 }
 function money(Qs, me) {
@@ -302,7 +304,8 @@ $("pool").innerHTML = pool.map(x => `<option value="${x.label.replace(/"/g, "&qu
 $("addp").onclick = () => { const x = pool.find(z => z.label === $("search").value); if (!x) { $("status").textContent = "Pick a player from the list to add."; return; }
   rosters[sel].push(Object.assign({}, x.p, { added: true, out: false })); $("search").value = ""; render(); };
 $("addsig").onclick = () => { const s = Math.max(.1, +$("sigsal").value || 1) * 1e6, a = +$("sigage").value || 27;
-  const c = comps(s, a); rosters[sel].push({ n: "New signing", pos: "M", age: a, sal: s, r: c.r, lo: c.lo, hi: c.hi, added: true }); render(); };
+  const nm = ($("signame").value || "").trim().slice(0, 40) || "New signing";
+  const c = comps(s, a); rosters[sel].push({ n: nm, pos: "M", age: a, sal: s, r: c.r, lo: c.lo, hi: c.hi, added: true, signing: true }); $("signame").value = ""; render(); };
 render();
 </script>
 </body>
