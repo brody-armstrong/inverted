@@ -1,0 +1,9 @@
+kpi,label,n_player_seasons,r_half,r_full_sb,passes
+gplus,g+ total,545,0.426,0.598,True
+ga_dribbling,g+ dribbling,545,0.287,0.447,True
+ga_passing,g+ passing,545,0.435,0.606,True
+ga_receiving,g+ receiving,545,0.479,0.648,True
+ga_shooting,g+ shooting,545,0.476,0.645,True
+ga_interrupting,g+ interrupting,545,0.097,0.178,False
+xg,xG,545,0.793,0.885,True
+xa,xA,545,0.627,0.771,True

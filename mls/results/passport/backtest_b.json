@@ -1,0 +1,12 @@
+{
+ "n_train": 73,
+ "n_test": 48,
+ "rmse_new": 0.06584852202120854,
+ "rmse_pathway": 0.06119443235174266,
+ "supported": false,
+ "coef": {
+  "const": -0.0176,
+  "gplus_eb": 0.3272,
+  "age": -0.0001
+ }
+}

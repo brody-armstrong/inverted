@@ -1,0 +1,113 @@
+player_id,player,group,kpi,reliable,raw_per96,shrunk_per96,lo90,hi90,raw_pct,age_adj_pct
+2lqRlj9aMr,Alex Bamford,Centre-backs,g+ total,True,-0.0172,-0.015,-0.0503,0.0204,51.7647,45.122
+2lqRlj9aMr,Alex Bamford,Centre-backs,g+ dribbling,True,-0.0073,-0.005,-0.0098,-0.0002,21.1765,4.878
+2lqRlj9aMr,Alex Bamford,Centre-backs,g+ passing,True,-0.0106,-0.0079,-0.0245,0.0086,36.4706,32.9268
+2lqRlj9aMr,Alex Bamford,Centre-backs,g+ receiving,True,-0.0102,-0.0091,-0.0159,-0.0023,29.4118,24.3902
+2lqRlj9aMr,Alex Bamford,Centre-backs,g+ shooting,True,0.0021,0.0007,-0.0041,0.0056,68.2353,68.2927
+2lqRlj9aMr,Alex Bamford,Centre-backs,g+ interrupting,False,0.0032,-0.0082,-0.0325,0.016,68.2353,71.9512
+2lqRlj9aMr,Alex Bamford,Centre-backs,xG,True,0.0323,0.0342,0.0199,0.0486,37.6471,
+2lqRlj9aMr,Alex Bamford,Centre-backs,xA,True,0.0034,0.0037,-0.0003,0.0077,16.4706,
+9vQ241Ex5K,Colin Griffith,Wingers,g+ total,True,0.1458,0.0709,-0.0225,0.1643,93.3333,84.6154
+9vQ241Ex5K,Colin Griffith,Wingers,g+ dribbling,True,0.0435,0.0309,-0.011,0.0728,78.6667,70.7692
+9vQ241Ex5K,Colin Griffith,Wingers,g+ passing,True,0.0363,0.0151,-0.0093,0.0395,92.0,87.6923
+9vQ241Ex5K,Colin Griffith,Wingers,g+ receiving,True,-0.0393,-0.0374,-0.0559,-0.0189,28.0,10.7692
+9vQ241Ex5K,Colin Griffith,Wingers,g+ shooting,True,0.0342,0.0213,0.0004,0.0423,90.6667,80.0
+9vQ241Ex5K,Colin Griffith,Wingers,g+ interrupting,False,-0.0039,-0.011,-0.0222,0.0002,72.0,83.0769
+9vQ241Ex5K,Colin Griffith,Wingers,xG,True,0.2393,0.2405,0.1611,0.3198,58.6667,41.5385
+9vQ241Ex5K,Colin Griffith,Wingers,xA,True,0.1143,0.1336,0.0893,0.1778,24.0,16.9231
+9vQ246AL5K,Charles Ondo,Fullbacks,g+ total,True,0.0381,0.0139,-0.0305,0.0584,85.5422,84.4156
+9vQ246AL5K,Charles Ondo,Fullbacks,g+ dribbling,True,0.0203,0.0102,-0.0027,0.0232,81.9277,90.9091
+9vQ246AL5K,Charles Ondo,Fullbacks,g+ passing,True,0.0054,0.0027,-0.0112,0.0167,74.6988,70.1299
+9vQ246AL5K,Charles Ondo,Fullbacks,g+ receiving,True,-0.0132,-0.0117,-0.0218,-0.0016,31.3253,31.1688
+9vQ246AL5K,Charles Ondo,Fullbacks,g+ shooting,True,0.0054,0.0045,-0.0024,0.0115,73.494,74.026
+9vQ246AL5K,Charles Ondo,Fullbacks,g+ interrupting,False,-0.0173,-0.011,-0.0198,-0.0022,33.7349,36.3636
+9vQ246AL5K,Charles Ondo,Fullbacks,xG,True,0.0458,0.0483,0.0233,0.0732,38.5542,31.1688
+9vQ246AL5K,Charles Ondo,Fullbacks,xA,True,0.0217,0.0229,0.011,0.0349,6.0241,2.5974
+EGMPRJpyqa,Daniel Nunez,Midfield,g+ total,True,-0.1426,-0.1129,-0.1575,-0.0683,3.8095,4.0816
+EGMPRJpyqa,Daniel Nunez,Midfield,g+ dribbling,True,-0.0625,-0.0104,-0.0296,0.0088,0.9524,7.1429
+EGMPRJpyqa,Daniel Nunez,Midfield,g+ passing,True,-0.0459,-0.0374,-0.0588,-0.0161,10.4762,9.1837
+EGMPRJpyqa,Daniel Nunez,Midfield,g+ receiving,True,-0.018,-0.0147,-0.0363,0.0069,47.619,63.2653
+EGMPRJpyqa,Daniel Nunez,Midfield,g+ shooting,True,-0.0042,-0.0037,-0.0143,0.0069,50.4762,51.0204
+EGMPRJpyqa,Daniel Nunez,Midfield,g+ interrupting,False,-0.0118,-0.0121,-0.0251,0.001,58.0952,56.1224
+EGMPRJpyqa,Daniel Nunez,Midfield,xG,True,0.1665,0.1616,0.1058,0.2174,77.1429,78.5714
+EGMPRJpyqa,Daniel Nunez,Midfield,xA,True,0.0749,0.08,0.0415,0.1185,40.9524,41.8367
+KAqBkZyvQb,Noah Santos,Wingers,g+ total,True,0.0154,0.0116,-0.0477,0.0709,60.0,60.0
+KAqBkZyvQb,Noah Santos,Wingers,g+ dribbling,True,0.051,0.0392,0.0038,0.0746,80.0,80.0
+KAqBkZyvQb,Noah Santos,Wingers,g+ passing,True,0.0286,0.0177,-0.0019,0.0373,85.3333,95.3846
+KAqBkZyvQb,Noah Santos,Wingers,g+ receiving,True,-0.0701,-0.0673,-0.0829,-0.0516,9.3333,6.1538
+KAqBkZyvQb,Noah Santos,Wingers,g+ shooting,True,0.0172,0.0149,0.0018,0.0281,72.0,70.7692
+KAqBkZyvQb,Noah Santos,Wingers,g+ interrupting,False,-0.0249,-0.0185,-0.0288,-0.0083,22.6667,21.5385
+KAqBkZyvQb,Noah Santos,Wingers,xG,True,0.2722,0.2683,0.1876,0.349,62.6667,61.5385
+KAqBkZyvQb,Noah Santos,Wingers,xA,True,0.1644,0.1718,0.1132,0.2304,46.6667,56.9231
+NWMWoYveMl,Eric Izoita,Midfield,g+ total,True,0.0607,0.0365,-0.0076,0.0806,91.4286,95.9184
+NWMWoYveMl,Eric Izoita,Midfield,g+ dribbling,True,0.0272,0.0215,0.0115,0.0315,90.4762,98.9796
+NWMWoYveMl,Eric Izoita,Midfield,g+ passing,True,0.029,0.0187,-0.0069,0.0442,87.619,84.6939
+NWMWoYveMl,Eric Izoita,Midfield,g+ receiving,True,-0.0168,-0.0164,-0.0243,-0.0085,52.381,55.102
+NWMWoYveMl,Eric Izoita,Midfield,g+ shooting,True,0.0273,0.0147,0.0023,0.0272,97.1429,97.9592
+NWMWoYveMl,Eric Izoita,Midfield,g+ interrupting,False,-0.0179,-0.0149,-0.0296,-0.0002,47.619,42.8571
+NWMWoYveMl,Eric Izoita,Midfield,xG,True,0.1505,0.1488,0.1073,0.1903,74.2857,76.5306
+NWMWoYveMl,Eric Izoita,Midfield,xA,True,0.2011,0.1674,0.1077,0.2271,87.619,94.898
+XVqKb2PD50,Nicklas Lund,Centre-backs,g+ total,True,-0.026,-0.0201,-0.0554,0.0152,41.1765,39.0244
+XVqKb2PD50,Nicklas Lund,Centre-backs,g+ dribbling,True,-0.0027,-0.0015,-0.0067,0.0036,36.4706,21.9512
+XVqKb2PD50,Nicklas Lund,Centre-backs,g+ passing,True,0.0026,0.002,-0.0113,0.0154,55.2941,59.7561
+XVqKb2PD50,Nicklas Lund,Centre-backs,g+ receiving,True,0.0071,0.0051,-0.0065,0.0166,72.9412,65.8537
+XVqKb2PD50,Nicklas Lund,Centre-backs,g+ shooting,True,0.001,0.0003,-0.0042,0.0048,64.7059,63.4146
+XVqKb2PD50,Nicklas Lund,Centre-backs,g+ interrupting,False,-0.0436,-0.0254,-0.0473,-0.0035,18.8235,17.0732
+XVqKb2PD50,Nicklas Lund,Centre-backs,xG,True,0.0587,0.0551,0.0307,0.0796,71.7647,
+XVqKb2PD50,Nicklas Lund,Centre-backs,xA,True,0.0208,0.0224,0.0072,0.0377,47.0588,
+Xj5YjkWAqb,Lucas Hernandez-Kim,Midfield,g+ total,True,-0.0757,-0.0661,-0.1064,-0.0257,26.6667,15.3061
+Xj5YjkWAqb,Lucas Hernandez-Kim,Midfield,g+ dribbling,True,-0.01,-0.003,-0.0195,0.0135,30.4762,32.6531
+Xj5YjkWAqb,Lucas Hernandez-Kim,Midfield,g+ passing,True,-0.0464,-0.0364,-0.0595,-0.0132,9.5238,6.1224
+Xj5YjkWAqb,Lucas Hernandez-Kim,Midfield,g+ receiving,True,0.0253,0.0065,-0.0151,0.028,94.2857,91.8367
+Xj5YjkWAqb,Lucas Hernandez-Kim,Midfield,g+ shooting,True,-0.0094,-0.0071,-0.0182,0.0039,40.0,33.6735
+Xj5YjkWAqb,Lucas Hernandez-Kim,Midfield,g+ interrupting,False,-0.0262,-0.02,-0.0333,-0.0068,28.5714,20.4082
+Xj5YjkWAqb,Lucas Hernandez-Kim,Midfield,xG,True,0.1646,0.1588,0.0961,0.2215,76.1905,73.4694
+Xj5YjkWAqb,Lucas Hernandez-Kim,Midfield,xA,True,0.1814,0.1611,0.1089,0.2134,82.8571,85.7143
+a35ry684ML,Daniel Cervantes,Strikers,g+ total,True,-0.0029,0.0116,-0.0614,0.0846,41.3043,20.0
+a35ry684ML,Daniel Cervantes,Strikers,g+ dribbling,True,0.0119,0.0143,-0.0111,0.0396,50.0,30.0
+a35ry684ML,Daniel Cervantes,Strikers,g+ passing,True,-0.0121,-0.0115,-0.0379,0.015,32.6087,32.5
+a35ry684ML,Daniel Cervantes,Strikers,g+ receiving,True,0.0288,0.0285,-0.0248,0.0818,56.5217,37.5
+a35ry684ML,Daniel Cervantes,Strikers,g+ shooting,True,-0.0065,-0.0013,-0.0127,0.0102,21.7391,7.5
+a35ry684ML,Daniel Cervantes,Strikers,g+ interrupting,False,-0.0124,-0.0088,-0.0158,-0.0018,39.1304,50.0
+a35ry684ML,Daniel Cervantes,Strikers,xG,True,0.6518,0.5868,0.4685,0.7051,91.3043,87.5
+a35ry684ML,Daniel Cervantes,Strikers,xA,True,0.077,0.0896,0.0524,0.1269,23.913,17.5
+aDQ0lP83QE,Connor Ferguson,Fullbacks,g+ total,True,-0.0115,-0.0129,-0.0569,0.0311,55.4217,36.3636
+aDQ0lP83QE,Connor Ferguson,Fullbacks,g+ dribbling,True,-0.0132,-0.0069,-0.0176,0.0038,22.8916,10.3896
+aDQ0lP83QE,Connor Ferguson,Fullbacks,g+ passing,True,0.0263,0.0155,-0.0015,0.0325,93.9759,94.8052
+aDQ0lP83QE,Connor Ferguson,Fullbacks,g+ receiving,True,-0.0346,-0.0253,-0.0401,-0.0105,2.4096,6.4935
+aDQ0lP83QE,Connor Ferguson,Fullbacks,g+ shooting,True,-0.0127,-0.0073,-0.0184,0.0039,10.8434,23.3766
+aDQ0lP83QE,Connor Ferguson,Fullbacks,g+ interrupting,False,0.0088,-0.0091,-0.018,-0.0002,78.3133,81.8182
+aDQ0lP83QE,Connor Ferguson,Fullbacks,xG,True,0.05,0.0531,0.0229,0.0832,43.3735,35.0649
+aDQ0lP83QE,Connor Ferguson,Fullbacks,xA,True,0.2228,0.1389,0.0556,0.2222,90.3614,76.6234
+gpMOL68O5z,Adolfo Enriquez,Midfield,g+ total,True,-0.0345,-0.0342,-0.0622,-0.0062,50.4762,50.0
+gpMOL68O5z,Adolfo Enriquez,Midfield,g+ dribbling,True,0.0058,0.0051,-0.0034,0.0137,60.9524,68.3673
+gpMOL68O5z,Adolfo Enriquez,Midfield,g+ passing,True,0.0078,0.0056,-0.0137,0.0248,70.4762,70.4082
+gpMOL68O5z,Adolfo Enriquez,Midfield,g+ receiving,True,-0.0247,-0.0246,-0.0277,-0.0215,32.381,25.5102
+gpMOL68O5z,Adolfo Enriquez,Midfield,g+ shooting,True,-0.0089,-0.0076,-0.0165,0.0012,40.9524,36.7347
+gpMOL68O5z,Adolfo Enriquez,Midfield,g+ interrupting,False,-0.0168,-0.0149,-0.0281,-0.0017,48.5714,45.9184
+gpMOL68O5z,Adolfo Enriquez,Midfield,xG,True,0.0245,0.0257,0.0072,0.0442,15.2381,16.3265
+gpMOL68O5z,Adolfo Enriquez,Midfield,xA,True,0.0857,0.0891,0.0515,0.1266,48.5714,46.9388
+jYQJg4OPMG,Bryce Vanvoorhis,Fullbacks,g+ total,True,-0.0612,-0.0468,-0.0833,-0.0104,21.6867,27.2727
+jYQJg4OPMG,Bryce Vanvoorhis,Fullbacks,g+ dribbling,True,-0.0207,-0.0028,-0.0177,0.012,7.2289,27.2727
+jYQJg4OPMG,Bryce Vanvoorhis,Fullbacks,g+ passing,True,-0.0227,-0.0152,-0.0357,0.0053,21.6867,35.0649
+jYQJg4OPMG,Bryce Vanvoorhis,Fullbacks,g+ receiving,True,-0.0085,-0.0061,-0.0226,0.0103,45.7831,57.1429
+jYQJg4OPMG,Bryce Vanvoorhis,Fullbacks,g+ shooting,True,-0.0056,-0.0044,-0.0121,0.0033,39.759,42.8571
+jYQJg4OPMG,Bryce Vanvoorhis,Fullbacks,g+ interrupting,False,-0.0014,-0.0099,-0.0188,-0.0009,61.4458,59.7403
+jYQJg4OPMG,Bryce Vanvoorhis,Fullbacks,xG,True,0.0546,0.0589,0.0197,0.0981,51.8072,61.039
+jYQJg4OPMG,Bryce Vanvoorhis,Fullbacks,xA,True,0.0377,0.0491,0.0096,0.0887,20.4819,20.7792
+p6qbgbN8Q0,Sawyer Jura,Fullbacks,g+ total,True,-0.0187,-0.0168,-0.0619,0.0283,49.3976,37.6623
+p6qbgbN8Q0,Sawyer Jura,Fullbacks,g+ dribbling,True,-0.0186,-0.0117,-0.0214,-0.002,10.8434,6.4935
+p6qbgbN8Q0,Sawyer Jura,Fullbacks,g+ passing,True,-0.0194,-0.0138,-0.0337,0.0062,26.506,23.3766
+p6qbgbN8Q0,Sawyer Jura,Fullbacks,g+ receiving,True,-0.0103,-0.0096,-0.0175,-0.0018,40.9639,36.3636
+p6qbgbN8Q0,Sawyer Jura,Fullbacks,g+ shooting,True,-0.0015,-0.0009,-0.011,0.0092,53.012,53.2468
+p6qbgbN8Q0,Sawyer Jura,Fullbacks,g+ interrupting,False,0.008,-0.0093,-0.0182,-0.0003,77.1084,76.6234
+p6qbgbN8Q0,Sawyer Jura,Fullbacks,xG,True,0.1042,0.0855,0.0141,0.1568,73.494,68.8312
+p6qbgbN8Q0,Sawyer Jura,Fullbacks,xA,True,0.118,0.1124,0.0416,0.1832,67.4699,61.039
+raMyealJMd,Benjamin Barjolo,Wingers,g+ total,True,-0.1404,-0.0983,-0.1714,-0.0251,4.0,7.6923
+raMyealJMd,Benjamin Barjolo,Wingers,g+ dribbling,True,-0.0655,-0.0131,-0.0577,0.0315,1.3333,13.8462
+raMyealJMd,Benjamin Barjolo,Wingers,g+ passing,True,-0.0279,-0.0194,-0.0385,-0.0004,17.3333,20.0
+raMyealJMd,Benjamin Barjolo,Wingers,g+ receiving,True,-0.0262,-0.0233,-0.0536,0.0069,36.0,32.3077
+raMyealJMd,Benjamin Barjolo,Wingers,g+ shooting,True,-0.0247,-0.0215,-0.0323,-0.0107,9.3333,7.6923
+raMyealJMd,Benjamin Barjolo,Wingers,g+ interrupting,False,0.0135,-0.0118,-0.0246,0.001,96.0,76.9231
+raMyealJMd,Benjamin Barjolo,Wingers,xG,True,0.1432,0.1501,0.0976,0.2025,24.0,16.9231
+raMyealJMd,Benjamin Barjolo,Wingers,xA,True,0.0631,0.12,0.0634,0.1767,2.6667,13.8462

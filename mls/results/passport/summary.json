@@ -1,0 +1,37 @@
+{
+ "written_utc": "2026-11-19T01:30:50Z",
+ "selected": "new",
+ "new_passes": true,
+ "exploratory_zero_mls_new_beats_both": true,
+ "reliable_kpis": [
+  "gplus",
+  "ga_dribbling",
+  "ga_passing",
+  "ga_receiving",
+  "ga_shooting",
+  "xg",
+  "xa"
+ ],
+ "cohorts": {
+  "2022": 233,
+  "2023": 329,
+  "2024": 370,
+  "2025": 368,
+  "2026": 356
+ },
+ "test_base_rate": 0.12972972972972974,
+ "regulars": 14,
+ "outcome_b": {
+  "n_train": 73,
+  "n_test": 48,
+  "rmse_new": 0.06584852202120854,
+  "rmse_pathway": 0.06119443235174266,
+  "supported": false,
+  "coef": {
+   "const": -0.0176,
+   "gplus_eb": 0.3272,
+   "age": -0.0001
+  }
+ },
+ "n_bootstrap": 500
+}
