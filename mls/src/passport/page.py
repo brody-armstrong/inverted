@@ -7,8 +7,18 @@ import duckdb
 
 OUT, DB, SITE = sys.argv[1:4]
 # When the commits first reached GitHub: the only timestamp anyone else can check. Filled in after the push.
-_fp = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../results/passport/first_public.txt")
-FIRST_PUBLIC = open(_fp).read().strip() if os.path.exists(_fp) else None
+_fp = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../results/passport/first_public.json")
+# {"github_time": "...", "github_record": GitHub's own push record,
+#  "wayback_prereg": Wayback snapshot of PREREGISTRATION.md as committed, "wayback_hash": Wayback snapshot of this page with the 2027 hash}
+FP = json.load(open(_fp)) if os.path.exists(_fp) else None
+def _a(url, text): return f'<a class="src" href="{html.escape(url)}">{html.escape(text)}</a>'
+if FP:
+    FIRST_PUBLIC = f"{html.escape(FP['github_time'])}, as recorded by GitHub"
+    RECORDS = (f'<p class="small">Records anyone can check: {_a(FP["github_record"], "GitHub push record")} · '
+               f'{_a(FP["wayback_prereg"], "pre-registration as committed (Wayback Machine, 18:25 PT)")} · '
+               f'{_a(FP["wayback_hash"], "this page with the 2027 hash (Wayback Machine, 18:11 PT)")}</p>')
+else:
+    FIRST_PUBLIC, RECORDS = None, ""
 DISPLAY = {"Xj5YjkWAqb": "Lucas Fernandez-Kim"}   # keyed by ASA player_id: the club's spelling differs from ASA's
 ORDER = {"Strikers": 0, "Wingers": 1, "Midfield": 2, "Fullbacks": 3, "Centre-backs": 4}
 
@@ -183,6 +193,7 @@ td button.pick:focus-visible{{outline:3px solid #2f7dd1;outline-offset:2px}}
 <section class="part" id="backtest" aria-labelledby="bt">
   <h2 id="bt">Has this worked before?</h2>
   <p>The rules were written and committed locally at 16:23 PT on 18 November 2026, before any outcome data was fetched; {"first public when pushed to GitHub on " + FIRST_PUBLIC if FIRST_PUBLIC else "first public when pushed to GitHub (time added after the push)"}. A local commit's date is set by whoever makes it, so the push is the first time anyone else can check, and it came after the outcome data was fetched. The rules: train on the 2022 and 2023 NEXT Pro cohorts, test on 2024 (outcomes through 2026), and use the new model only if it beats both simpler baselines on both scores.</p>
+  {RECORDS}
   <p><strong>{verdict_a}</strong></p>
   <div class="tablebox"><table>
     <thead><tr><th>Model (2024 test cohort)</th><th class="num">Brier</th><th class="num">Log loss</th><th class="num">Mean predicted</th><th class="num">Observed</th></tr></thead>

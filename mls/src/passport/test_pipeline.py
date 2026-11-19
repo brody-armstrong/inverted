@@ -1,6 +1,7 @@
 """pytest checks for each stage of the readiness passport pipeline.
 Paths come from environment variables set by run.sh: PASSPORT_RAW, PASSPORT_DB, PASSPORT_OUT, SITE_REPO.
 """
+import html
 import os, glob, json, re
 import pandas as pd
 import duckdb
@@ -128,3 +129,15 @@ def test_passports_match_frozen_2027_list():
 def test_no_unverifiable_timestamp_claim():
     h = open(f"{SITE}/inverted/passport/index.html", encoding="utf-8").read().lower()
     assert "timestamped" not in h and "committed locally at 16:23 pt" in h and "first public when pushed to github" in h
+
+
+def test_first_public_record_is_third_party():
+    """The push time must come from GitHub's record, with a Wayback Machine archive; never our own word."""
+    fp = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../results/passport/first_public.json")
+    if not os.path.exists(fp):
+        return
+    r = json.load(open(fp))
+    assert r["github_record"].startswith("https://github.com/") or r["github_record"].startswith("https://api.github.com/")
+    assert all(r[k].startswith("https://web.archive.org/web/") for k in ("wayback_prereg", "wayback_hash"))
+    h = open(f"{SITE}/inverted/passport/index.html", encoding="utf-8").read()
+    assert all(html.escape(r[k]) in h for k in ("github_record", "wayback_prereg", "wayback_hash"))
